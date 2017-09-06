@@ -1,0 +1,2 @@
+export const CHANGE_HOME_TAB = 'CHANGE_HOME_TAB';
+export const SET_SEARCH_KEYWORD = 'SET_SEARCH_KEYWORD';

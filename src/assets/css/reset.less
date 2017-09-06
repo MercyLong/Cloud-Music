@@ -1,0 +1,145 @@
+div,
+p,
+ul,
+li,
+a,
+img,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+header,
+footer,
+section,
+article,
+form,
+input,
+textarea,
+video,
+iframe {
+  margin: 0;
+  padding: 0;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0; // font-size: 12px;
+  color: #222222;
+  background: #fff;
+}
+
+img {
+  display: block;
+  width: 100%;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+a {
+  color: #222;
+  text-decoration: none;
+}
+
+a,
+input {
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  border-radius: 0;
+  border: 0;
+  background-color: transparent;
+}
+
+button {}
+
+textarea {
+  overflow: hidden;
+}
+
+.clearfix:after {
+  display: block;
+  visibility: hidden;
+  font-size: 0;
+  clear: both;
+  width: 0;
+  height: 0;
+  content: '.';
+}
+
+.border-1px {
+  position: relative;
+  &:after {
+    position: absolute;
+    z-index: 2;
+    content: "";
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    -webkit-transform-origin: top left;
+    transform-origin: top left;
+    border: 0 solid rgba(0, 0, 0, .1);
+    border-width: 1px;
+    border-color: #fff;
+  }
+}
+
+.f-hide {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: normal;
+}
+
+.border-bt {
+  position: relative;
+  &:after {
+    position: absolute;
+    z-index: 2;
+    content: "";
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    -webkit-transform-origin: top left;
+    transform-origin: top left;
+    border: 0 solid rgba(0, 0, 0, .1);
+    border-bottom-width: 1px;
+    border-color: #ccc;
+  }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 2) {
+  .border-1px,
+  .border-bt {
+    &:after {
+      width: 200%;
+      height: 200%;
+      -webkit-transform: scale(.5);
+      transform: scale(.5);
+    }
+  }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 1.5) {
+  .border-1px,
+  .border-bt {
+    &:after {
+      width: 300%;
+      height: 300%;
+      -webkit-transform: scale(.333333);
+      transform: scale(.333333);
+    }
+  }
+}
