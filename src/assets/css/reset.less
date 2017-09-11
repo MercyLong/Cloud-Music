@@ -29,7 +29,6 @@ html {
   margin: 0;
   padding: 0; // font-size: 12px;
   color: #222222;
-  background: #fff;
 }
 
 img {
@@ -89,7 +88,16 @@ textarea {
     transform-origin: top left;
     border: 0 solid rgba(0, 0, 0, .1);
     border-width: 1px;
-    border-color: #fff;
+    border-color: #ccc;
+  }
+}
+
+@keyframes circleloop {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
   }
 }
 
@@ -120,10 +128,74 @@ textarea {
   }
 }
 
+.border-tp {
+  position: relative;
+  &:before {
+    position: absolute;
+    z-index: 2;
+    content: "";
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    -webkit-transform-origin: top left;
+    transform-origin: top left;
+    border: 0 solid rgba(0, 0, 0, .1);
+    border-top-width: 1px;
+    border-color: #ccc;
+  }
+}
+
+.border-lt {
+  position: relative;
+  &:after {
+    position: absolute;
+    z-index: 2;
+    content: "";
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    -webkit-transform-origin: top left;
+    transform-origin: top left;
+    border: 0 solid rgba(0, 0, 0, .1);
+    border-left-width: 1px;
+    border-color: #ccc;
+  }
+}
+
+.border-rt {
+  position: relative;
+  &:before {
+    position: absolute;
+    z-index: 2;
+    content: "";
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    -webkit-transform-origin: top left;
+    transform-origin: top left;
+    border: 0 solid rgba(0, 0, 0, .1);
+    border-right-width: 1px;
+    border-color: #ccc;
+  }
+}
+
 @media screen and (-webkit-min-device-pixel-ratio: 2) {
   .border-1px,
-  .border-bt {
-    &:after {
+  .border-bt,
+  .border-tp,
+  .border-lt,
+  .border-rt {
+    &:after,
+    &:before {
       width: 200%;
       height: 200%;
       -webkit-transform: scale(.5);
@@ -134,12 +206,122 @@ textarea {
 
 @media screen and (-webkit-min-device-pixel-ratio: 1.5) {
   .border-1px,
-  .border-bt {
-    &:after {
+  .border-bt,
+  .border-tp,
+  .border-lt,
+  .border-rt {
+    &:after,
+    .before {
       width: 300%;
       height: 300%;
       -webkit-transform: scale(.333333);
       transform: scale(.333333);
     }
   }
+}
+
+// 矢量图
+@font-face {
+  font-family: 'iconfont';
+  /* project id 409336 */
+  src: url('//at.alicdn.com/t/font_409336_3a61alvizy9cnmi.eot');
+  src: url('//at.alicdn.com/t/font_409336_3a61alvizy9cnmi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_409336_3a61alvizy9cnmi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_409336_3a61alvizy9cnmi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_409336_3a61alvizy9cnmi.svg#iconfont') format('svg');
+}
+
+@font-face {
+  font-family: 'iconfont';
+  /* project id 409336 */
+  src: url('//at.alicdn.com/t/font_409336_vdn4uuj1zpxmvx6r.eot');
+  src: url('//at.alicdn.com/t/font_409336_vdn4uuj1zpxmvx6r.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_409336_vdn4uuj1zpxmvx6r.woff') format('woff'),
+  url('//at.alicdn.com/t/font_409336_vdn4uuj1zpxmvx6r.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_409336_vdn4uuj1zpxmvx6r.svg#iconfont') format('svg');
+}
+
+// 快进矢量图
+@font-face {
+  font-family: 'iconfont';
+  /* project id 409336 */
+  src: url('//at.alicdn.com/t/font_409336_bdotxefx1ku1h5mi.eot');
+  src: url('//at.alicdn.com/t/font_409336_bdotxefx1ku1h5mi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_409336_bdotxefx1ku1h5mi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_409336_bdotxefx1ku1h5mi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_409336_bdotxefx1ku1h5mi.svg#iconfont') format('svg');
+}
+
+// 快退矢量图
+@font-face {
+  font-family: 'iconfont';
+  /* project id 409336 */
+  src: url('//at.alicdn.com/t/font_409336_lq2jwbox79v5z5mi.eot');
+  src: url('//at.alicdn.com/t/font_409336_lq2jwbox79v5z5mi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_409336_lq2jwbox79v5z5mi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_409336_lq2jwbox79v5z5mi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_409336_lq2jwbox79v5z5mi.svg#iconfont') format('svg');
+}
+
+// 随机循环
+@font-face {
+  font-family: 'iconfont';
+  /* project id 409336 */
+  src: url('//at.alicdn.com/t/font_409336_7qxfwfwgcrtfbt9.eot');
+  src: url('//at.alicdn.com/t/font_409336_7qxfwfwgcrtfbt9.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_409336_7qxfwfwgcrtfbt9.woff') format('woff'),
+  url('//at.alicdn.com/t/font_409336_7qxfwfwgcrtfbt9.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_409336_7qxfwfwgcrtfbt9.svg#iconfont') format('svg');
+}
+
+// 单曲循环
+@font-face {
+  font-family: 'iconfont';
+  /* project id 409336 */
+  src: url('//at.alicdn.com/t/font_409336_vln5ni0eu7agiudi.eot');
+  src: url('//at.alicdn.com/t/font_409336_vln5ni0eu7agiudi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_409336_vln5ni0eu7agiudi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_409336_vln5ni0eu7agiudi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_409336_vln5ni0eu7agiudi.svg#iconfont') format('svg');
+}
+
+// 歌单
+@font-face {
+  font-family: 'iconfont';
+  /* project id 409336 */
+  src: url('//at.alicdn.com/t/font_409336_p4o29zqbq9bmlsor.eot');
+  src: url('//at.alicdn.com/t/font_409336_p4o29zqbq9bmlsor.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_409336_p4o29zqbq9bmlsor.woff') format('woff'),
+  url('//at.alicdn.com/t/font_409336_p4o29zqbq9bmlsor.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_409336_p4o29zqbq9bmlsor.svg#iconfont') format('svg');
+}
+
+// 喇叭
+@font-face {
+  font-family: 'iconfont';
+  /* project id 409336 */
+  src: url('//at.alicdn.com/t/font_409336_zipxhtd6awi2j4i.eot');
+  src: url('//at.alicdn.com/t/font_409336_zipxhtd6awi2j4i.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_409336_zipxhtd6awi2j4i.woff') format('woff'),
+  url('//at.alicdn.com/t/font_409336_zipxhtd6awi2j4i.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_409336_zipxhtd6awi2j4i.svg#iconfont') format('svg');
+}
+
+// 叉叉
+@font-face {
+  font-family: 'iconfont';
+  /* project id 409336 */
+  src: url('//at.alicdn.com/t/font_409336_z4si5qlqljy30udi.eot');
+  src: url('//at.alicdn.com/t/font_409336_z4si5qlqljy30udi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_409336_z4si5qlqljy30udi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_409336_z4si5qlqljy30udi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_409336_z4si5qlqljy30udi.svg#iconfont') format('svg');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

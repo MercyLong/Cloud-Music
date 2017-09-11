@@ -7,10 +7,15 @@ let getHotSearch;
 let getSearchResults;
 let getMultiSearchResults;
 let getSongDetail;
+let getSongLRC;
+let getSongAudioUrl;
+let getVideoDetail;
+let getMvRecommend;
+let getMvComments;
 /* global __DEV__ */
 if (__DEV__) {
-  baseUrl = '//127.0.0.1:3000';
-  onlineMuiscUrl = '//music.163.com';
+  baseUrl = 'api';
+  onlineMuiscUrl = '';
 } else {
   baseUrl = 'XXX.com';
 }
@@ -21,6 +26,11 @@ getHotSearch = `${onlineMuiscUrl}/weapi/search/hot`;
 getSearchResults = `${baseUrl}/search`;
 getMultiSearchResults = `${getSearchResults}/multimatch`;
 getSongDetail = `${baseUrl}/song/detail`;
+getSongLRC = `${baseUrl}/lyric`;
+getSongAudioUrl = `${baseUrl}/music/url`;
+getVideoDetail = `${baseUrl}/mv`;
+getMvRecommend = `${baseUrl}/simi/mv`;
+getMvComments = `${baseUrl}/comment/mv`;
 export {
   getRecommendList,
   getNewSongs,
@@ -28,5 +38,10 @@ export {
   getHotSearch,
   getSearchResults,
   getMultiSearchResults,
-  getSongDetail
+  getSongDetail,
+  getSongLRC,
+  getSongAudioUrl,
+  getVideoDetail,
+  getMvRecommend,
+  getMvComments
 };

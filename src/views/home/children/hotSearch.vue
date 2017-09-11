@@ -36,7 +36,6 @@
             </div>
             <div class="album-content">
               <div class="album-name f-hide">歌手：{{artist.name}}</div>
-              <!-- <p class="album-artist">{{artist.artist.name}}</p> -->
             </div>
             <div class="right-arrow">
               <svg height="13" width="7" xmlns="http://www.w3.org/2000/svg" class="category_arrow" version="1.1">
@@ -45,6 +44,7 @@
             </div>
           </li>
         </ul>
+        <mv-lists :has-type="true" :has-arrow="true" :mv-list="searchMv"></mv-lists>
         <song-lists :song-lists="songSearchResults"></song-lists>
       </section>
     </div>
@@ -54,6 +54,7 @@
 import { fetchHotSearch, fetchMultiSearchResults, fetchSongSearchResults } from 'service';
 import { mapMutations, mapState } from 'vuex';
 import songLists from './songLists';
+import mvLists from 'common/mvLists';
 export default {
   methods: {
     ...mapMutations(['SET_SEARCH_KEYWORD']),
@@ -67,13 +68,19 @@ export default {
 
     setSearchKeywords(keyword) {
       this.SET_SEARCH_KEYWORD(keyword);
+      // 设置本地存储
+      // this.setLocalHistory(keyword);
       this.getResultsByKeyword(keyword);
+    },
+    setLocalHistory(keyword) {
+      localStorage.searchHistory.push(keyword);
     },
     async getResultsByKeyword(keyword) {
       var res = await fetchMultiSearchResults(keyword);
       if (res.code === 200) {
         this.searchAlbum = res.result.album;
         this.searchArtist = res.result.artist;
+        this.searchMv = res.result.mv;
       };
       var resSong = await fetchSongSearchResults(keyword);
       if (resSong.code === 200) {
@@ -87,6 +94,11 @@ export default {
           song: item
         };
       });
+    },
+    initLocalStorageHistory() {
+      if (!localStorage.searchHistory) {
+        localStorage.setItem('searchHistory', []);
+      };
     }
   },
   watch: {
@@ -98,18 +110,25 @@ export default {
     ...mapState(['searchKeywords'])
   },
   components: {
-    songLists
+    songLists,
+    mvLists
   },
   data() {
     return {
       hotsLists: [],
       searchAlbum: [],
       searchArtist: [],
-      songSearchResults: []
+      songSearchResults: [],
+      searchMv: []
     };
   },
   mounted() {
+    if (this.searchKeywords) {
+      this.getResultsByKeyword(this.searchKeywords);
+    };
     this.initHotSearch();
+    // 初始化本地存储搜索历史数组
+    // this.initLocalStorageHistory();
   }
 };
 
@@ -120,8 +139,18 @@ export default {
     padding: 8px 0 4px;
   }
   .search-result-album-list,
-  .search-result-artist-list {
+  .search-result-artist-list,
+  .search-result-mv-list {
     margin-left: 10px;
+    .mv-pic-url {
+      width: 89px;
+      height: 50px;
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    }
     .right-arrow {
       padding-top: 1px;
       margin: 0 9px;
@@ -136,7 +165,6 @@ export default {
       flex-direction: column;
       .album-name {
         font-size: 17px;
-
         color: #333;
       }
       .album-artist {
@@ -158,6 +186,9 @@ export default {
         width: 50px;
         height: 50px;
         &.cover-url {
+          img {
+            height: 100%;
+          }
           &:after {
             content: "";
             position: absolute;

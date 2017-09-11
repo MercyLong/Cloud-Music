@@ -1,6 +1,6 @@
 <template>
   <div class="new-song-list">
-    <div @click="gotoSongPlayer(item.song.id)" :key="item.song.id" class="new-song-link" v-for="item in songLists">
+    <div @click="gotoSongPlayer(item.song.id,item)" :key="item.song.id" class="new-song-link" v-for="item in songLists">
       <div class="new-song-item border-bt">
         <div class="new-song-item-content">
           <div class="title">
@@ -26,17 +26,21 @@
   </div>
 </template>
 <script type="text/javascript">
+import { mapMutations } from 'vuex';
+import { _setLocalHistoryForCurrent } from 'config/util';
 export default {
   props: ['songLists'],
   methods: {
-    gotoSongPlayer(id) {
-      console.log(this);
+    ...mapMutations(['SET_PLAYING_STATUS']),
+    gotoSongPlayer(id, item) {
       this.$router.push({
         path: 'song',
         query: {
           id: id
         }
       });
+      this.SET_PLAYING_STATUS(true);
+      _setLocalHistoryForCurrent(item);
     }
   }
 };

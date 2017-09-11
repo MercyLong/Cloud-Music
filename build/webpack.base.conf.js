@@ -24,6 +24,7 @@ module.exports = {
       'common': resolve('src/components'),
       'config': resolve('src/config'),
       'service': resolve('src/service'),
+      'images': resolve('src/assets/images')
     },
     symlinks: false
   },

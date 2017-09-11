@@ -5,7 +5,7 @@
   "author": "liangxiang@baidu.com",
   "private": true,
   "scripts": {
-    "dev": "node build/dev-server.js",
+    "dev": "node build/dev-server.js & node dep/NeteaseCloudMusicApi/app.js",
     "start": "node build/dev-server.js",
     "build": "node build/build.js",
     "lint": "eslint --ext .js,.vue src"
@@ -60,7 +60,16 @@
     "webpack-bundle-analyzer": "^2.2.1",
     "webpack-dev-middleware": "^1.10.0",
     "webpack-hot-middleware": "^2.18.0",
-    "webpack-merge": "^4.1.0"
+    "webpack-merge": "^4.1.0",
+    "husky": "^0.14.3",
+    "intelli-espower-loader": "^1.0.1",
+    "lint-staged": "^4.0.3",
+    "mocha": "^3.2.0",
+    "power-assert": "^1.4.2",
+    "prettier": "^1.5.3",
+    "apicache": "^0.9.0",
+    "big-integer": "^1.6.17",
+    "request": "^2.81.0"
   },
   "engines": {
     "node": ">= 4.0.0",

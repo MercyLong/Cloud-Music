@@ -3,10 +3,15 @@
 import Vue from 'vue';
 import App from './App';
 import router from './router';
+import * as filters from 'config/filter';
+
 import {
   CreateStore
 } from './store';
 Vue.config.productionTip = false;
+Object.keys(filters).forEach((key) => {
+  Vue.filter(key, filters[key]);
+});
 /* eslint-disable no-new */
 export function CreateApp() {
   const store = CreateStore();

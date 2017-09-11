@@ -1,37 +1,193 @@
 <template>
   <div class="song-player-wrapper">
-    <div class="song-player-bg"></div>
+    <div :style="{backgroundImage:`url(//music.163.com/api/img/blur/${songInfo.al&&songInfo.al.pic_str})`}" class="song-player-bg">
+    </div>
     <div class="song-player-info">
       <div class="song-player-disk-wrapper">
         <div class="song-player-disk">
-          <div class="song-player-disk-turn"></div>
+          <div :style="{animationPlayState:isAnimated?'':'paused'}" class="song-player-disk-turn">
+            <div class="song-player-img">
+              <img :src="songInfo.al&&songInfo.al.picUrl">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="song-player-detail">
+        <div class="song-player-artist">
+          <span>{{songInfo.name}}</span>
+          <span>-</span>
+          <span class="author">{{songInfo.ar&&songInfo.ar[0].name}}</span>
+        </div>
+        <div class="lrc-info-wrapper">
+          <div class="lrc-info-scroll">
+            <div :style="{transform:`translateY(-${offsetHeight}px)`}" class="inner-scroll-wrapper">
+              <div :class="item.timeStamp <= current &&(!lrcInfo[$index + 1]||( current <= lrcInfo[$index + 1].timeStamp)) ?'active':''" v-for="(item ,$index) in lrcInfo" class="inner lrc-info-text">{{item.text}}</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+    <audio @ended="audioPlayEnded" @timeupdate="audioUpdateTime" id="song-player-audio" autoplay="autoplay" :src="songAudioUrl">
+    </audio>
+    <audio-control></audio-control>
   </div>
 </template>
 <script type="text/javascript">
-import { fetchSongDetail } from 'service';
+import { fetchSongLRC, fetchSongAudioUrl } from 'service';
+import audioControl from './children/audioControl';
+import { mapActions, mapState, mapMutations } from 'vuex';
 export default {
   created() {
-    this.songId = this.$route.query.id;
     if (!this.songId) {
       this.$router.push('/');
     }
   },
+  data() {
+    return {
+      songId: this.$route.query.id,
+      lrcInfo: '',
+      songAudioUrl: '',
+      current: 0,
+      offset: 0,
+      offsetHeight: 0
+    };
+  },
+  components: {
+    audioControl
+  },
+  watch: {
+    current(newVal, oldVal) {
+      this.lrcInfo.forEach((item, idx) => {
+        if ((item.timeStamp <= newVal) && (idx - 1 > 0)) {
+          this.offset = idx - 1;
+        };
+      });
+    },
+    offset(newVal, oldVal) {
+      var elemLRC = document.querySelectorAll('.inner');
+      var currentHeight = elemLRC[newVal - 1].offsetHeight;
+      this.offsetHeight += currentHeight;
+    },
+    songId(newVal, oldVal) {
+      this.initSongContent();
+    },
+    $route(newVal, oldVal) {
+      this.songId = newVal.query.id;
+      this.offsetHeight = 0;
+    }
+  },
+  computed: {
+    ...mapState(['currentSongInfo', 'isPlaying', 'loopStatus', 'currentSongId', 'currentPlayLists']),
+    songInfo() {
+      return this.currentSongInfo;
+    },
+    isAnimated() {
+      return this.isPlaying;
+    }
+  },
   methods: {
+    ...mapActions(['fetchSongDetailByAction']),
+    ...mapMutations(['SET_AUDIO_TIME', 'SET_PLAYING_STATUS', 'SET_CURRENT_SONG_ID']),
+    initSongContent() {
+      this.initSongDetailInfo();
+      this.initSongLRCInfo();
+      this.initSongAudioUrl();
+    },
     async initSongDetailInfo() {
-      var res = await fetchSongDetail(this.songId);
-      console.log(res);
+      this.fetchSongDetailByAction(this.songId);
+    },
+    async initSongLRCInfo() {
+      var res = await fetchSongLRC(this.songId);
+      if (res.lrc && res.lrc.lyric) {
+        // 正则匹配 空格替换成换行符。前面的时间全部替换掉
+        var infoArray = res.lrc.lyric.split('\n');
+        var pattern = /\[\d{2}:\d{2}.\d{0,}\]/g;
+        // 最后一个元素是空元素，弹掉
+        (infoArray[-1] === undefined) && infoArray.pop();
+        infoArray = infoArray.map((item, idx) => {
+          if (item.match(pattern)) {
+            var timeString = item.match(pattern)[0];
+            var timeArr = timeString.slice(1, -1).split(':');
+            var timeStamp = parseInt(timeArr[0] * 60) + parseFloat(timeArr[1]);
+            var lrcText = item.replace(pattern, '');
+          }
+          return { text: lrcText, timeStamp: timeStamp };
+        }).filter((item, idx) => {
+          return item.text !== '';
+        });
+        this.lrcInfo = infoArray;
+      } else {
+        this.lrcInfo = [];
+      }
+    },
+    async initSongAudioUrl() {
+      var res = await fetchSongAudioUrl(this.songId);
+      if (res.code === 200 && res.data[0].url) {
+        this.songAudioUrl = res.data[0].url;
+      }
+    },
+    audioUpdateTime() {
+      var audioElem = document.getElementById('song-player-audio');
+      if (audioElem) {
+        var current = audioElem.currentTime;
+        // 添加0.2秒触发条件到VUE渲染的时间
+        this.current = current + 0.2;
+        this.SET_AUDIO_TIME(this.current);
+        // 根据current找到当前所在的offset
+      }
+    },
+    audioPlayEnded() {
+      this.offsetHeight = 0;
+      let nextSongIndex = this.findNextSongIndex();
+      this.gotoContinue(nextSongIndex);
+      this.SET_PLAYING_STATUS(true);
+    },
+    gotoContinue(songIndex) {
+      if (this.loopStatus === 1 || this.currentPlayLists.length === 1) {
+        // 单曲循环，重新播放
+        document.getElementById('song-player-audio').play();
+      } else {
+        var songId = this.currentPlayLists[songIndex].song.id;
+        this.$router.push({
+          path: 'song',
+          query: {
+            id: songId
+          }
+        });
+      }
+    },
+    findNextSongIndex() {
+      let idx;
+      let songIndex;
+      let len = this.currentPlayLists.length;
+      this.currentPlayLists.forEach((item, index) => {
+        if (item.song.id === parseInt(this.songId)) {
+          idx = index;
+        };
+      });
+      switch (this.loopStatus) {
+        // 列表循环
+        case 0:
+          songIndex = idx < (len - 1) ? idx + 1 : 0;
+          break;
+        case 1:
+          songIndex = idx;
+          break;
+        case 2:
+          songIndex = Math.floor(Math.random(0, len));
+          break;
+      };
+      console.log(songIndex);
+      return songIndex;
     }
   },
   mounted() {
-    this.initSongDetailInfo();
+    this.initSongContent();
   }
 };
 
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .song-player-wrapper {
   height: 100%;
   min-width: 320px;
@@ -68,6 +224,8 @@ export default {
           background-size: contain;
         }
         .song-player-disk-turn {
+          animation: circleloop 32s linear infinite;
+          position: relative;
           width: 100%;
           height: 100%;
           &:before,
@@ -97,12 +255,67 @@ export default {
             -webkit-animation: circling 20s infinite linear;
             animation: circling 20s infinite linear;
           }
+          .song-player-img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            @media screen and (min-width: 360px) {
+              width: 184px;
+              height: 184px;
+            }
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+    .song-player-detail {
+      padding: 0 35px;
+      margin-top: 25px;
+      .song-player-artist {
+        text-align: center;
+        font-size: 18px;
+        line-height: 1.1;
+        color: #fefefe;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        .author {
+          font-size: 16px;
+          color: hsla(0, 0%, 100%, .6);
+        }
+      }
+      .lrc-info-wrapper {
+        margin-top: 14px;
+        .lrc-info-scroll {
+          line-height: 1.5;
+          font-size: 16px;
+          height: 88px;
+          overflow: hidden;
+          text-align: center;
+          color: hsla(0, 0%, 100%, .6);
+          .inner-scroll-wrapper {
+            transition: transform .2s;
+          }
+          .lrc-info-text {
+            padding-bottom: 8px;
+            &.active {
+              color: rgb(255, 255, 255);
+            }
+          }
         }
       }
     }
   }
   .song-player-bg {
-    background-image: url(//music.163.com/api/img/blur/109951163018963706);
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    z-index: -1;
     opacity: 1;
     background-position: 50%;
     background-repeat: no-repeat;
@@ -111,7 +324,6 @@ export default {
     transform: scale(1.5);
     -webkit-transform-origin: center top;
     transform-origin: center top;
-    z-index: -1;
     transition: opacity .3s linear;
     &:after {
       position: absolute;

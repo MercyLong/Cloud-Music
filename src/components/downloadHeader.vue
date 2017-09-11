@@ -32,7 +32,6 @@
           </g>
         </svg>
       </div>
-      <div class="download-btn border-1px">下载APP</div>
     </div>
   </div>
 </template>
@@ -45,6 +44,14 @@ export default {
 <style lang="less" scoped>
 .download-header-wrapper {
   height: 64px;
+}
+
+.playing-gif {
+  width: 10px;
+  height: 10px;
+  background: url(//y.gtimg.cn/mediastyle/yqq/img/wave.gif) 0 0 no-repeat;
+  text-indent: -99px;
+  overflow: hidden;
 }
 
 .download-header {

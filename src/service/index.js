@@ -69,6 +69,58 @@ var fetchSongDetail = (songId) => {
     return result;
   });
 };
+/*
+ **@ 获取音乐歌词
+ */
+var fetchSongLRC = (songId) => {
+  return fetch('GET', api.getSongLRC, {
+    id: songId
+  }).then((result) => {
+    return result;
+  });
+};
+/*
+ **@ 获取音乐地址
+ */
+var fetchSongAudioUrl = (songId) => {
+  return fetch('GET', api.getSongAudioUrl, {
+    id: songId
+  }).then((result) => {
+    return result;
+  });
+};
+/*
+ **@ 获取MV详情
+ */
+var fetchVideoDetail = (videoId) => {
+  return fetch('GET', api.getVideoDetail, {
+    mvid: videoId
+  }).then((result) => {
+    return result;
+  });
+};
+/*
+ **@ 获取MV评论
+ */
+var fetchMvComments = (id, offset = 0, limit = 20) => {
+  return fetch('GET', api.getMvComments, {
+    id: id,
+    offset: offset,
+    limit: limit
+  }).then((result) => {
+    return result;
+  });
+};
+/*
+ **@ 获取MV相似推荐
+ */
+var fetchMvRecommends = (id) => {
+  return fetch('GET', api.getMvRecommend, {
+    mvid: id
+  }).then((result) => {
+    return result;
+  });
+};
 export {
   fetchRecommendList,
   fetchNewSongList,
@@ -76,5 +128,10 @@ export {
   fetchHotSearch,
   fetchMultiSearchResults,
   fetchSongSearchResults,
-  fetchSongDetail
+  fetchSongDetail,
+  fetchSongLRC,
+  fetchSongAudioUrl,
+  fetchVideoDetail,
+  fetchMvComments,
+  fetchMvRecommends
 };
