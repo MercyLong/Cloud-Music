@@ -8,7 +8,7 @@
 </template>
 <script type="text/javascript">
 import { fetchNewSongList } from 'service';
-import songLists from './songLists';
+import songLists from 'common/songLists';
 export default {
   methods: {
     async initNewSongList() {

@@ -53,7 +53,7 @@
 <script type="text/javascript">
 import { fetchHotSearch, fetchMultiSearchResults, fetchSongSearchResults } from 'service';
 import { mapMutations, mapState } from 'vuex';
-import songLists from './songLists';
+import songLists from 'common/songLists';
 import mvLists from 'common/mvLists';
 export default {
   methods: {

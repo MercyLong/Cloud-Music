@@ -1,5 +1,6 @@
 <template>
   <div class="song-player-wrapper">
+    <header-top></header-top>
     <div :style="{backgroundImage:`url(//music.163.com/api/img/blur/${songInfo.al&&songInfo.al.pic_str})`}" class="song-player-bg">
     </div>
     <div class="song-player-info">
@@ -35,12 +36,13 @@
 <script type="text/javascript">
 import { fetchSongLRC, fetchSongAudioUrl } from 'service';
 import audioControl from './children/audioControl';
+import headerTop from 'common/header';
 import { mapActions, mapState, mapMutations } from 'vuex';
 export default {
   created() {
     if (!this.songId) {
       this.$router.push('/');
-    }
+    };
   },
   data() {
     return {
@@ -53,15 +55,18 @@ export default {
     };
   },
   components: {
-    audioControl
+    audioControl,
+    headerTop
   },
   watch: {
     current(newVal, oldVal) {
-      this.lrcInfo.forEach((item, idx) => {
-        if ((item.timeStamp <= newVal) && (idx - 1 > 0)) {
-          this.offset = idx - 1;
-        };
-      });
+      if (this.lrcInfo.length) {
+        this.lrcInfo.forEach((item, idx) => {
+          if ((item.timeStamp <= newVal) && (idx - 1 > 0)) {
+            this.offset = idx - 1;
+          };
+        });
+      };
     },
     offset(newVal, oldVal) {
       var elemLRC = document.querySelectorAll('.inner');
@@ -177,7 +182,6 @@ export default {
           songIndex = Math.floor(Math.random(0, len));
           break;
       };
-      console.log(songIndex);
       return songIndex;
     }
   },

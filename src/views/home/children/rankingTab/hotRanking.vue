@@ -7,7 +7,7 @@
   </div>
 </template>
 <script type="text/javascript">
-import songLists from './songLists';
+import songLists from 'common/songLists';
 import listView from './listView';
 export default {
   components: {

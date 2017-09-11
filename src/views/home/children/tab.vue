@@ -2,7 +2,7 @@
   <div class="home-ui-tab-wrapper">
     <nav class="home-ui-tab border-bt">
       <li @click="changeHomeTab(tab.id)" v-for="tab in tabList" class="tab-item">
-        <div :class="tab.id==homeTabCurrentIndex?'active':''" class="tab-text">
+        <div @click="gotoTabContent(tab.route)" :class="tab.id==homeTabCurrentIndex?'active':''" class="tab-text">
           <span>{{tab.text}}</span>
         </div>
       </li>
@@ -18,20 +18,39 @@ export default {
       currentIndex: 0,
       tabList: [{
         id: 0,
-        text: '推荐音乐'
+        text: '推荐音乐',
+        route: 'recommend'
       }, {
         id: 1,
-        text: '排行榜'
+        text: '排行榜',
+        route: 'ranking'
       }, {
         id: 2,
-        text: '搜索'
+        text: '搜索',
+        route: 'search'
       }]
     };
+  },
+  created() {
+    let pathName = this.$route.name;
+    this.findInitIndex(pathName);
   },
   methods: {
     ...mapMutations(['CHANGE_HOME_TAB']),
     changeHomeTab(id) {
       this.CHANGE_HOME_TAB(id);
+    },
+    findInitIndex(pathName) {
+      this.tabList.forEach((item, index) => {
+        if (item.route === pathName) {
+          this.CHANGE_HOME_TAB(item.id);
+        }
+      });
+    },
+    gotoTabContent(route) {
+      this.$router.push({
+        path: route
+      });
     }
   },
   computed: {
@@ -56,6 +75,7 @@ export default {
   height: 40px;
   background: #fff;
   position: fixed;
+  transform: translate3d(0, 0, 0);
   top: 64px;
   left: 0;
   z-index: 100;

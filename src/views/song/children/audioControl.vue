@@ -2,9 +2,11 @@
   <div class="audio-control-wrapper">
     <div class="audio-progress-wrapper">
       <div class="start-time">{{parseInt(audioCurrentTime)|ComputedMinsAndSecond}}</div>
-      <div class="progress-bar">
+      <div @click="clickProgressBar($event)" class="progress-bar">
         <div class="ready"></div>
-        <div :style="{width:readyWidth}" class="current"></div>
+        <div :style="{width:readyWidth}" class="current">
+          <span></span>
+        </div>
       </div>
       <div class="end-time">{{parseInt(currentSongInfo.dt/1000)|ComputedMinsAndSecond}}</div>
     </div>
@@ -52,7 +54,7 @@ export default {
     this.SET_CURRENT_PLAY_LIST(songListHistory);
   },
   methods: {
-    ...mapMutations(['SET_PLAYING_STATUS', 'CHANGE_LOOP_STATUS', 'SET_CURRENT_PLAY_LIST']),
+    ...mapMutations(['SET_PLAYING_STATUS', 'CHANGE_LOOP_STATUS', 'SET_CURRENT_PLAY_LIST', 'SET_AUDIO_TIME']),
     setPlayingStatus() {
       var audioElem = document.getElementById('song-player-audio');
       this.isPlaying ? audioElem.pause() : audioElem.play();
@@ -62,14 +64,32 @@ export default {
       let id = loop.id < 2 ? loop.id + 1 : 0;
       this.CHANGE_LOOP_STATUS(id);
     },
+    clickProgressBar(ev) {
+      let rect = ev.target.getBoundingClientRect();
+      let leftMargin = rect.left;
+      let pageX = ev.pageX - leftMargin;
+      let elemWidth = rect.width;
+      let percent = parseFloat(pageX / elemWidth);
+      let duration = this.currentSongInfo.dt / 1000;
+      let currentTime = parseInt(duration * percent);
+      this.SET_AUDIO_TIME(currentTime);
+      var audioElem = document.getElementById('song-player-audio');
+      audioElem.currentTime = currentTime;
+    },
     removeFromList(songId) {
       // 如果删除的是当前播放的音乐，跳到下一首
-      if (songId === this.currentSongInfo.id) {
-        this.clickButton('next');
-        this.hideSongLists();
-      }
       let leftPlayLists = _removeLocalHistoryForCurrent(songId);
-      this.SET_CURRENT_PLAY_LIST(leftPlayLists);
+      if (leftPlayLists.length) {
+        if (songId === this.currentSongInfo.id) {
+          this.clickButton('next');
+          this.hideSongLists();
+        };
+        this.SET_CURRENT_PLAY_LIST(leftPlayLists);
+      } else {
+        this.$router.push({
+          path: '/'
+        });
+      }
     },
     showSongLists() {
       this.isShowListsPanel = true;
@@ -80,6 +100,12 @@ export default {
     clickButton(type) {
       let idx;
       let len = this.currentPlayLists.length;
+      if (len === 1) {
+        let elem = document.getElementById('song-player-audio');
+        elem.play();
+        this.SET_PLAYING_STATUS(true);
+        return;
+      }
       this.currentPlayLists.forEach((item, index) => {
         if (item.song.id === this.currentSongInfo.id) {
           idx = index;
@@ -169,7 +195,7 @@ export default {
         height: 40px;
         &:last-child {
           &:after {
-            border-bottom-width: 0;
+            border: none;
           }
         }
         &.active {
@@ -252,18 +278,43 @@ export default {
       margin: 0 10px;
       height: 2px;
       width: 240px;
-      background: #e1e1e1;
+      padding: 10px 0;
       border-radius: 5px;
       position: relative;
       margin-bottom: 1px;
       .ready {
+        background: #e1e1e1;
+        width: 100%;
         position: absolute;
-        height: 100%;
+        height: 2px;
       }
       .current {
         position: absolute;
-        height: 100%;
+        height: 2px;
         background: red;
+        span {
+          position: absolute;
+          right: 0;
+          margin-top: 1px;
+          transform: translate(50%, -50%);
+          display: inline-block;
+          width: 6px;
+          height: 6px;
+          border: 8px solid #fff;
+          border-radius: 50%;
+          background: red;
+        } // &:after {
+        //   transform: translate(5px, -7px);
+        //   position: absolute;
+        //   display: block;
+        //   right: 0;
+        //   width: 2px;
+        //   height: 2px;
+        //   border: 7px solid #fff;
+        //   content: '';
+        //   border-radius: 50%;
+        //   background: transparent;
+        // }
       }
     }
   }

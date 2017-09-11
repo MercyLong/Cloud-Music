@@ -2,8 +2,9 @@
   <div class="search-wrapper">
     <div class="search-bar-wrapper border-bt">
       <div class="search-bar">
-        <i class="u-svg u-svg-srch"></i>
+        <i class="search-icon iconfont">&#xe66f;</i>
         <input v-model="keyword" class="search-bar-input" type="text" name="search-bar" placeholder="搜索歌曲、歌手、专辑">
+        <i @click="clearSearchKeywords" v-if="searchKeywords" class="search-clear iconfont">&#xe833;</i>
       </div>
     </div>
     <hot-search></hot-search>
@@ -14,7 +15,10 @@ import hotSearch from './hotSearch';
 import { mapState, mapMutations } from 'vuex';
 export default {
   methods: {
-    ...mapMutations(['SET_SEARCH_KEYWORD'])
+    ...mapMutations(['SET_SEARCH_KEYWORD']),
+    clearSearchKeywords() {
+      this.SET_SEARCH_KEYWORD(null);
+    }
   },
   computed: {
     ...mapState(['searchKeywords']),
@@ -45,6 +49,21 @@ export default {
     box-sizing: border-box;
     background: #ebecec;
     border-radius: 30px;
+    .search-icon {
+      position: absolute;
+      top: 3.5px;
+      left: 8px;
+      font-size: 20px;
+      color: #999;
+    }
+    .search-clear {
+      padding: 5px;
+      position: absolute;
+      top: 1.5px;
+      right: 7px;
+      font-size: 16px;
+      color: #999;
+    }
   }
   input {
     width: 100%;
