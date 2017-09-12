@@ -7,7 +7,7 @@
           <li @click="setSearchKeywords(hot.first)" v-for="hot in hotsLists" class="hot-item border-1px">{{hot.first}}</li>
         </ul>
       </div>
-      <div class="hot-history"></div>
+      <search-history></search-history>
     </div>
     <div v-if="searchKeywords" class="search-result-wrapper">
       <!-- 搜索专辑列表 -->
@@ -54,7 +54,9 @@
 import { fetchHotSearch, fetchMultiSearchResults, fetchSongSearchResults } from 'service';
 import { mapMutations, mapState } from 'vuex';
 import songLists from 'common/songLists';
+import searchHistory from './searchHistory';
 import mvLists from 'common/mvLists';
+import { _setLocalSearchHistory } from 'config/util';
 export default {
   methods: {
     ...mapMutations(['SET_SEARCH_KEYWORD']),
@@ -69,7 +71,7 @@ export default {
     setSearchKeywords(keyword) {
       this.SET_SEARCH_KEYWORD(keyword);
       // 设置本地存储
-      // this.setLocalHistory(keyword);
+      _setLocalSearchHistory('searchHistory', keyword);
       this.getResultsByKeyword(keyword);
     },
     setLocalHistory(keyword) {
@@ -111,7 +113,8 @@ export default {
   },
   components: {
     songLists,
-    mvLists
+    mvLists,
+    searchHistory
   },
   data() {
     return {

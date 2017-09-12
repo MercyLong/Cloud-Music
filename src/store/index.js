@@ -7,6 +7,8 @@ Vue.use(Vuex);
 export function CreateStore() {
   return new Vuex.Store({
     state: {
+      // 音频DOM元素
+      audioElement: document.getElementById('song-player-audio'),
       // 过场动画
       globalLoading: true,
       // 首页tab的索引
@@ -18,10 +20,14 @@ export function CreateStore() {
       // 当前播放音乐的id
       currentSongId: null,
       // 是否正在播放
-      isPlaying: true,
+      isPlaying: false,
+      // 设置音频的URL
+      songAudioUrl: '',
       audioCurrentTime: 0,
       // 循环方式，默认列表循环
       loopStatus: 0,
+      // 歌词数组
+      lrcInfo: [],
       loopInitData: [{
           id: 0,
           text: '列表循环',

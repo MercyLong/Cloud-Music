@@ -2,7 +2,7 @@
   <div class="audio-control-wrapper">
     <div class="audio-progress-wrapper">
       <div class="start-time">{{parseInt(audioCurrentTime)|ComputedMinsAndSecond}}</div>
-      <div @click="clickProgressBar($event)" class="progress-bar">
+      <div id="progress-bar" @click="clickProgressBar($event)" class="progress-bar">
         <div class="ready"></div>
         <div :style="{width:readyWidth}" class="current">
           <span></span>
@@ -65,7 +65,8 @@ export default {
       this.CHANGE_LOOP_STATUS(id);
     },
     clickProgressBar(ev) {
-      let rect = ev.target.getBoundingClientRect();
+      let elem = document.getElementById('progress-bar');
+      let rect = elem.getBoundingClientRect();
       let leftMargin = rect.left;
       let pageX = ev.pageX - leftMargin;
       let elemWidth = rect.width;
@@ -75,10 +76,21 @@ export default {
       this.SET_AUDIO_TIME(currentTime);
       var audioElem = document.getElementById('song-player-audio');
       audioElem.currentTime = currentTime;
+      this.resetLRC(currentTime);
+    },
+    resetLRC(currentTime) {
+      let offsetHeight = 0;
+      this.lrcInfo.forEach((item, idx) => {
+        if ((item.timeStamp <= currentTime) && (idx - 2 > 0)) {
+          let elemLRC = document.querySelectorAll('.inner');
+          offsetHeight += elemLRC[idx - 2].offsetHeight;
+        }
+      });
+      this.$emit('RESET-LRC', offsetHeight);
     },
     removeFromList(songId) {
       // 如果删除的是当前播放的音乐，跳到下一首
-      let leftPlayLists = _removeLocalHistoryForCurrent(songId);
+      let leftPlayLists = _removeLocalHistoryForCurrent('historyStack', songId);
       if (leftPlayLists.length) {
         if (songId === this.currentSongInfo.id) {
           this.clickButton('next');
@@ -133,7 +145,7 @@ export default {
       this.SET_PLAYING_STATUS(true);
     },
     gotoSong(songId) {
-      this.$router.push({
+      this.$router.replace({
         path: 'song',
         query: {
           id: songId
@@ -147,7 +159,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['currentSongInfo', 'audioCurrentTime', 'isPlaying', 'loopInitData', 'loopStatus', 'currentPlayLists']),
+    ...mapState(['currentSongInfo', 'audioCurrentTime', 'isPlaying', 'loopInitData', 'loopStatus', 'currentPlayLists', 'lrcInfo']),
     readyWidth() {
       var currentTime = parseInt(this.audioCurrentTime);
       var totalTime = parseInt(this.currentSongInfo.dt / 1000);
@@ -300,7 +312,7 @@ export default {
           display: inline-block;
           width: 6px;
           height: 6px;
-          border: 8px solid #fff;
+          border: 6px solid #fff;
           border-radius: 50%;
           background: red;
         } // &:after {

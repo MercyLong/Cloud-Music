@@ -1,7 +1,7 @@
 <template>
   <div class="song-player-wrapper">
     <header-top></header-top>
-    <div :style="{backgroundImage:`url(//music.163.com/api/img/blur/${songInfo.al&&songInfo.al.pic_str})`}" class="song-player-bg">
+    <div :style="{backgroundImage:`url(//music.163.com/api/img/blur/${songInfo.al&&(songInfo.al.pic_str||songInfo.al.pic)})`}" class="song-player-bg">
     </div>
     <div class="song-player-info">
       <div class="song-player-disk-wrapper">
@@ -22,15 +22,13 @@
         <div class="lrc-info-wrapper">
           <div class="lrc-info-scroll">
             <div :style="{transform:`translateY(-${offsetHeight}px)`}" class="inner-scroll-wrapper">
-              <div :class="item.timeStamp <= current &&(!lrcInfo[$index + 1]||( current <= lrcInfo[$index + 1].timeStamp)) ?'active':''" v-for="(item ,$index) in lrcInfo" class="inner lrc-info-text">{{item.text}}</div>
+              <div :class="item.timeStamp <= audioCurrentTime &&(!lrcInfo[$index + 1]||( audioCurrentTime <= lrcInfo[$index + 1].timeStamp)) ?'active':''" v-for="(item ,$index) in lrcInfo" class="inner lrc-info-text">{{item.text}}</div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <audio @ended="audioPlayEnded" @timeupdate="audioUpdateTime" id="song-player-audio" autoplay="autoplay" :src="songAudioUrl">
-    </audio>
-    <audio-control></audio-control>
+    <audio-control ref="audioControlElement" @RESET-LRC="changeLRC"></audio-control>
   </div>
 </template>
 <script type="text/javascript">
@@ -47,9 +45,6 @@ export default {
   data() {
     return {
       songId: this.$route.query.id,
-      lrcInfo: '',
-      songAudioUrl: '',
-      current: 0,
       offset: 0,
       offsetHeight: 0
     };
@@ -59,7 +54,7 @@ export default {
     headerTop
   },
   watch: {
-    current(newVal, oldVal) {
+    audioCurrentTime(newVal, oldVal) {
       if (this.lrcInfo.length) {
         this.lrcInfo.forEach((item, idx) => {
           if ((item.timeStamp <= newVal) && (idx - 1 > 0)) {
@@ -82,7 +77,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['currentSongInfo', 'isPlaying', 'loopStatus', 'currentSongId', 'currentPlayLists']),
+    ...mapState(['currentSongInfo', 'isPlaying', 'loopStatus', 'currentSongId', 'currentPlayLists', 'audioCurrentTime', 'lrcInfo', 'audioElement']),
     songInfo() {
       return this.currentSongInfo;
     },
@@ -92,15 +87,19 @@ export default {
   },
   methods: {
     ...mapActions(['fetchSongDetailByAction']),
-    ...mapMutations(['SET_AUDIO_TIME', 'SET_PLAYING_STATUS', 'SET_CURRENT_SONG_ID']),
+    ...mapMutations(['SET_AUDIO_TIME', 'SET_PLAYING_STATUS', 'SET_CURRENT_SONG_ID', 'SET_AUDIO_URL', 'SET_LRC_INFO']),
     initSongContent() {
       this.initSongDetailInfo();
       this.initSongLRCInfo();
       this.initSongAudioUrl();
     },
+    changeLRC(offset) {
+      this.offsetHeight = offset;
+    },
     async initSongDetailInfo() {
       this.fetchSongDetailByAction(this.songId);
     },
+
     async initSongLRCInfo() {
       var res = await fetchSongLRC(this.songId);
       if (res.lrc && res.lrc.lyric) {
@@ -118,75 +117,28 @@ export default {
           }
           return { text: lrcText, timeStamp: timeStamp };
         }).filter((item, idx) => {
-          return item.text !== '';
+          return Boolean(item.text) === true;
         });
-        this.lrcInfo = infoArray;
-      } else {
-        this.lrcInfo = [];
+        this.SET_LRC_INFO(infoArray);
       }
     },
     async initSongAudioUrl() {
       var res = await fetchSongAudioUrl(this.songId);
       if (res.code === 200 && res.data[0].url) {
-        this.songAudioUrl = res.data[0].url;
-      }
-    },
-    audioUpdateTime() {
-      var audioElem = document.getElementById('song-player-audio');
-      if (audioElem) {
-        var current = audioElem.currentTime;
-        // 添加0.2秒触发条件到VUE渲染的时间
-        this.current = current + 0.2;
-        this.SET_AUDIO_TIME(this.current);
-        // 根据current找到当前所在的offset
-      }
-    },
-    audioPlayEnded() {
-      this.offsetHeight = 0;
-      let nextSongIndex = this.findNextSongIndex();
-      this.gotoContinue(nextSongIndex);
-      this.SET_PLAYING_STATUS(true);
-    },
-    gotoContinue(songIndex) {
-      if (this.loopStatus === 1 || this.currentPlayLists.length === 1) {
-        // 单曲循环，重新播放
-        document.getElementById('song-player-audio').play();
+        this.SET_AUDIO_URL(res.data[0].url);
       } else {
-        var songId = this.currentPlayLists[songIndex].song.id;
-        this.$router.push({
-          path: 'song',
-          query: {
-            id: songId
-          }
-        });
+        // 当没有URL的时候的处理方式
       }
-    },
-    findNextSongIndex() {
-      let idx;
-      let songIndex;
-      let len = this.currentPlayLists.length;
-      this.currentPlayLists.forEach((item, index) => {
-        if (item.song.id === parseInt(this.songId)) {
-          idx = index;
-        };
-      });
-      switch (this.loopStatus) {
-        // 列表循环
-        case 0:
-          songIndex = idx < (len - 1) ? idx + 1 : 0;
-          break;
-        case 1:
-          songIndex = idx;
-          break;
-        case 2:
-          songIndex = Math.floor(Math.random(0, len));
-          break;
-      };
-      return songIndex;
     }
   },
   mounted() {
-    this.initSongContent();
+    // 没有在后台运行,初始化
+    if ((this.songId) !== this.currentSongInfo.id) {
+      this.initSongContent();
+      this.SET_PLAYING_STATUS(true);
+    } else {
+      this.$refs['audioControlElement'].resetLRC(this.audioCurrentTime);
+    }
   }
 };
 

@@ -32,12 +32,45 @@
           </g>
         </svg>
       </div>
+      <div @click="gotoCurrentSong" :class="isPlaying?'isPlaying':''" class="playing-status">
+        <span class="first"></span>
+        <span class="second"></span>
+        <span class="thrid"></span>
+        <span class="fourth"></span>
+        <span class="fifth"></span>
+      </div>
     </div>
   </div>
 </template>
 <script type="text/javascript">
+import { mapState } from 'vuex';
 export default {
-
+  computed: {
+    ...mapState(['isPlaying', 'currentSongInfo'])
+  },
+  methods: {
+    gotoCurrentSong() {
+      // 优先查找Vuex里的数据
+      let localCurrentSong = localStorage.getItem('currentSong');
+      let id;
+      if (localCurrentSong) {
+        localCurrentSong = JSON.parse(localCurrentSong);
+      };
+      if (this.currentSongInfo.id) {
+        id = this.currentSongInfo.id;
+      } else if (localCurrentSong && localCurrentSong.id) {
+        id = localCurrentSong.id;
+      } else {
+        return false;
+      }
+      this.$router.push({
+        path: 'song',
+        query: {
+          id: id
+        }
+      });
+    }
+  }
 };
 
 </script>
@@ -66,6 +99,60 @@ export default {
   height: 64px;
   background-color: #d43c33;
   box-sizing: border-box;
+  .playing-status {
+    height: 19px;
+    &.isPlaying {
+      @keyframes loading {
+        0%,
+        100% {
+          transform-origin: bottom;
+          transform: scaleY(.3);
+        }
+        50% {
+          transform-origin: bottom;
+          transform: scaleY(1);
+        }
+      }
+      span {
+        animation: loading .6s ease infinite;
+        &:nth-child(1) {
+          -webkit-animation-delay: 0.2s;
+        }
+        &:nth-child(2) {
+          -webkit-animation-delay: 0.4s;
+        }
+        &:nth-child(3) {
+          -webkit-animation-delay: 0.6s;
+        }
+        &:nth-child(4) {
+          -webkit-animation-delay: 0.8s;
+        }
+        &:nth-child(5) {
+          -webkit-animation-delay: 0.8s;
+        }
+      }
+    }
+    span {
+      display: inline-block;
+      width: 2px;
+      background: #fff;
+      &.first {
+        height: 15px;
+      }
+      &.thrid {
+        height: 17px;
+      }
+      &.second {
+        height: 11px;
+      }
+      &.fourth {
+        height: 14px;
+      }
+      &.fifth {
+        height: 12px;
+      }
+    }
+  }
   .svg-wrapper {
     flex: 1;
     position: relative;

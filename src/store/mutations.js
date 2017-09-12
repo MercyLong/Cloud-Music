@@ -7,7 +7,10 @@ import {
   CHANGE_LOOP_STATUS,
   SET_CURRENT_SONG_ID,
   SET_CURRENT_PLAY_LIST,
-  SET_CURRENT_VIDEO_INFO
+  SET_CURRENT_VIDEO_INFO,
+  SET_AUDIO_URL,
+  SET_LRC_INFO,
+  SET_RUNNING_STATUS
 } from './mutations-type.js';
 export default {
   // 改变主页tab栏
@@ -38,5 +41,14 @@ export default {
   },
   [SET_CURRENT_VIDEO_INFO](state, videoInfo) {
     state.currentVideoInfo = Object.assign({}, videoInfo);
+  },
+  [SET_AUDIO_URL](state, url) {
+    state.songAudioUrl = url;
+  },
+  [SET_LRC_INFO](state, lrcInfo) {
+    state.lrcInfo = lrcInfo;
+  },
+  [SET_RUNNING_STATUS](state, boolean) {
+    state.isRunningInBackground = boolean;
   }
 };

@@ -27,7 +27,7 @@
 </template>
 <script type="text/javascript">
 import { mapMutations } from 'vuex';
-import { _setLocalHistoryForCurrent } from 'config/util';
+import { _setLocalHistoryForCurrent, _setCurrentSongInLocal } from 'config/util';
 export default {
   props: ['songLists'],
   methods: {
@@ -39,8 +39,8 @@ export default {
           id: id
         }
       });
-      this.SET_PLAYING_STATUS(true);
-      _setLocalHistoryForCurrent(item);
+      _setCurrentSongInLocal(item);
+      _setLocalHistoryForCurrent('historyStack', item);
     }
   }
 };
