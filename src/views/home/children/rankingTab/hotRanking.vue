@@ -1,18 +1,34 @@
 <template>
   <div class="hot-ranking-wrapper">
+    <div class="offical-ranking-title">
+      云音乐官方榜
+    </div>
     <list-view :list-idx="3"></list-view>
     <list-view :list-idx="0"></list-view>
     <list-view :list-idx="2"></list-view>
     <list-view :list-idx="1"></list-view>
+    <div class="offical-ranking-title">
+      全球排行榜
+    </div>
+    <play-list-block :recommend-list="rankingList"></play-list-block>
   </div>
 </template>
 <script type="text/javascript">
 import songLists from 'common/songLists';
 import listView from './listView';
+import playListBlock from 'common/playListBlock';
+import { rankingList } from 'config/meta';
+
 export default {
+  data() {
+    return {
+      rankingList: rankingList
+    };
+  },
   components: {
     songLists,
-    listView
+    listView,
+    playListBlock
   },
   methods: {
     async initHotRankingList() {}
@@ -23,8 +39,27 @@ export default {
 };
 
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .hot-ranking-wrapper {
+  .offical-ranking-title {
+    font-weight: 400;
+    position: relative;
+    padding-left: 9px;
+    margin: 14px 0;
+    font-size: 17px;
+    height: 20px;
+    line-height: 20px;
+    &:after {
+      content: " ";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      margin-top: -9px;
+      width: 2px;
+      height: 16px;
+      background-color: #d33a31;
+    }
+  }
   .hot-ranking-cover {
     position: relative;
     padding-top: 38.9%;

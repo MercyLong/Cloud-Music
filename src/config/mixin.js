@@ -49,7 +49,7 @@ export const replaceImageUrl = {
   //  查看浏览器是否支持webp格式的图片
   changeImageType(imageUrl, type) {
     let reg = /\.(\w+)$/;
-    if (this.isSupportImageType(type)) {
+    if (this.isSupportImageType(type) && imageUrl) {
       return imageUrl.replace(reg, `.${type}`);
     } else {
       return imageUrl;
