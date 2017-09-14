@@ -7,8 +7,9 @@ Vue.use(Vuex);
 export function CreateStore() {
   return new Vuex.Store({
     state: {
+
       // 音频DOM元素
-      audioElement: document.getElementById('song-player-audio'),
+      audioElement: null,
       // 过场动画
       globalLoading: true,
       // 首页tab的索引
@@ -44,10 +45,14 @@ export function CreateStore() {
           icon: '&#xe62a;'
         }
       ],
-      // 当前播放歌单
+      // 当前播放歌单详情
+      currentPlayListDetail: {},
+      // 当前播放歌单列表
       currentPlayLists: [],
       // 当前视频信息
-      currentVideoInfo: {}
+      currentVideoInfo: {},
+      // 当前播放列表类型 true.歌单类型 false.历史信息（本地信息）
+      playListType: false
     },
     actions,
     mutations

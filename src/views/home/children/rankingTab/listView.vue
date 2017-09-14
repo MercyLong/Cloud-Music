@@ -8,7 +8,7 @@
         <span class="order-number">{{$index + 1}}.</span> {{item.name}} -
         <template>
           <span v-for="(singer,idx) in item.artists">
-              	<span v-if="idx > 0">/ </span>{{singer.name}}
+                <span v-if="idx > 0">/ </span>{{singer.name}}
           </span>
         </template>
       </li>
@@ -18,6 +18,7 @@
 <script type="text/javascript">
 // 根据网易云音乐的API,不同的榜单是通过传入不同的idx
 import { fetchTopList } from 'service';
+import { replaceImageUrl } from 'config/mixin';
 export default {
   props: ['listIdx'],
   data() {
@@ -26,13 +27,16 @@ export default {
       coverImage: null
     };
   },
+  mixins: {
+    replaceImageUrl
+  },
   methods: {
     async initTopList(idx) {
       var res = await fetchTopList(idx);
       if (res.code === 200) {
         var fullTopLists = res.result && res.result.tracks;
         this.topLists = fullTopLists.slice(0, 3);
-        this.coverImage = res.result && res.result.coverImgUrl;
+        this.coverImage = res.result && replaceImageUrl.changeImageType(res.result.coverImgUrl, 'webp');
       };
     }
   },

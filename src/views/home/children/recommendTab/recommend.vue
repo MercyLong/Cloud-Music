@@ -3,23 +3,37 @@
     <div class="recommend">
       <h2 class="recommend-title">推荐歌单</h2>
       <div class="recommend-list">
-        <a class="recommend-item" v-for="item in recommendList">
+        <router-link :key="item.id" :to="{path:'playlist',query:{id:item.id}}" class="recommend-item" v-for="item in recommendList">
           <div class="recommend-item-img">
-            <img :src="item.picUrl">
+            <img @load="completeLoad(item)" :src="`${item.picTinyUrl}`">
+            <span class="recommend-like-num">
+            <i class="iconfont">&#xe600;</i>
+            {{item.playCount| addMeasurement(4,'万')}}</span>
           </div>
           <div class="recommend-item-text">{{item.name}}</div>
-        </a>
+        </router-link>
       </div>
     </div>
   </div>
 </template>
 <script type="text/javascript">
 import { fetchRecommendList } from 'service';
+import { replaceImageUrl } from 'config/mixin';
 export default {
   methods: {
     async initRecommendList() {
       var res = await fetchRecommendList() || {};
-      this.recommendList = res.result;
+      this.recommendList = this.dataProcess(res.result);
+    },
+    dataProcess(list) {
+      list.map((item, idx) => {
+        item.picTinyUrl = replaceImageUrl.tinyImageUrl(item.picUrl, 40);
+        return item;
+      });
+      return list;
+    },
+    completeLoad(item) {
+      item.picTinyUrl = replaceImageUrl.changeImageType(item.picUrl, 'webp');
     }
   },
   data() {
@@ -66,6 +80,32 @@ export default {
         box-sizing: border-box;
         padding: 0 1px;
         margin-bottom: 16px;
+        .recommend-item-img {
+          position: relative;
+          &:after {
+            content: " ";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 20px;
+            z-index: 2;
+            background-image: linear-gradient(180deg, rgba(0, 0, 0, .5), transparent);
+          }
+          .recommend-like-num {
+            z-index: 3;
+            position: absolute;
+            top: 0;
+            right: 5px;
+            color: #fff;
+            text-align: right;
+            line-height: 20px;
+            font-size: 14px;
+            .iconfont {
+              font-size: 10px;
+            }
+          }
+        }
         &:nth-child(3n) {
           width: 33.4%;
           padding-left: 2px;

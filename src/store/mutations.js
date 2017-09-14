@@ -10,7 +10,10 @@ import {
   SET_CURRENT_VIDEO_INFO,
   SET_AUDIO_URL,
   SET_LRC_INFO,
-  SET_RUNNING_STATUS
+  SET_RUNNING_STATUS,
+  SET_CURRENT_PLAY_LIST_DETAIL,
+  SET_AUDIO_ELEMENT,
+  SET_PLAY_LIST_TYPE
 } from './mutations-type.js';
 export default {
   // 改变主页tab栏
@@ -50,5 +53,14 @@ export default {
   },
   [SET_RUNNING_STATUS](state, boolean) {
     state.isRunningInBackground = boolean;
+  },
+  [SET_CURRENT_PLAY_LIST_DETAIL](state, detailInfo) {
+    state.currentPlayListDetail = Object.assign({}, detailInfo);
+  },
+  [SET_AUDIO_ELEMENT](state, element) {
+    state.audioElement = element;
+  },
+  [SET_PLAY_LIST_TYPE](state, boolean) {
+    state.playListType = boolean;
   }
 };

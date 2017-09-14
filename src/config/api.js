@@ -12,6 +12,7 @@ let getSongAudioUrl;
 let getVideoDetail;
 let getMvRecommend;
 let getMvComments;
+let getPlayListDetail;
 /* global __DEV__ */
 if (__DEV__) {
   baseUrl = 'api';
@@ -31,6 +32,7 @@ getSongAudioUrl = `${baseUrl}/music/url`;
 getVideoDetail = `${baseUrl}/mv`;
 getMvRecommend = `${baseUrl}/simi/mv`;
 getMvComments = `${baseUrl}/comment/mv`;
+getPlayListDetail = `${baseUrl}/playlist/detail`;
 export {
   getRecommendList,
   getNewSongs,
@@ -43,5 +45,6 @@ export {
   getSongAudioUrl,
   getVideoDetail,
   getMvRecommend,
-  getMvComments
+  getMvComments,
+  getPlayListDetail
 };

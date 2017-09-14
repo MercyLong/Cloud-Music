@@ -1,8 +1,8 @@
 <template>
   <div class="home-ui-tab-wrapper">
     <nav class="home-ui-tab border-bt">
-      <li @click="changeHomeTab(tab.id)" v-for="tab in tabList" class="tab-item">
-        <div @click="gotoTabContent(tab.route)" :class="tab.id==homeTabCurrentIndex?'active':''" class="tab-text">
+      <li @click="changeHomeTab(tab)" v-for="tab in tabList" class="tab-item">
+        <div :class="tab.id==homeTabCurrentIndex?'active':''" class="tab-text">
           <span>{{tab.text}}</span>
         </div>
       </li>
@@ -37,8 +37,9 @@ export default {
   },
   methods: {
     ...mapMutations(['CHANGE_HOME_TAB']),
-    changeHomeTab(id) {
-      this.CHANGE_HOME_TAB(id);
+    changeHomeTab(tab) {
+      this.CHANGE_HOME_TAB(tab.id);
+      this.gotoTabContent(tab.route);
     },
     findInitIndex(pathName) {
       this.tabList.forEach((item, index) => {

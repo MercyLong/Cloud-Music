@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     ...mapActions(['fetchSongDetailByAction']),
-    ...mapMutations(['SET_AUDIO_TIME', 'SET_PLAYING_STATUS', 'SET_CURRENT_SONG_ID', 'SET_AUDIO_URL', 'SET_LRC_INFO']),
+    ...mapMutations(['SET_AUDIO_TIME', 'SET_PLAYING_STATUS', 'SET_CURRENT_SONG_ID', 'SET_AUDIO_URL', 'SET_LRC_INFO', 'SET_AUDIO_ELEMENT']),
     initSongContent() {
       this.initSongDetailInfo();
       this.initSongLRCInfo();
@@ -126,6 +126,7 @@ export default {
       var res = await fetchSongAudioUrl(this.songId);
       if (res.code === 200 && res.data[0].url) {
         this.SET_AUDIO_URL(res.data[0].url);
+        this.SET_AUDIO_ELEMENT(document.getElementById('song-player-audio'));
       } else {
         // 当没有URL的时候的处理方式
       }
@@ -137,7 +138,7 @@ export default {
       this.initSongContent();
       this.SET_PLAYING_STATUS(true);
     } else {
-      this.$refs['audioControlElement'].resetLRC(this.audioCurrentTime);
+      this.$refs['audioControlElement'].resetLRC(this.audioCurrentTime, 2);
     }
   }
 };

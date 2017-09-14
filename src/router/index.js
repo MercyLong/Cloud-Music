@@ -6,6 +6,7 @@ import RecommendTab from '@/views/home/children/recommendTab';
 import RankingTab from '@/views/home/children/rankingTab';
 import SearchTab from '@/views/home/children/searchTab';
 import Mv from '@/views/mv/mv';
+import PlayList from '@/views/playlist/playlist';
 Vue.use(Router);
 export default new Router({
   mode: 'history',
@@ -35,5 +36,9 @@ export default new Router({
     path: '/mv',
     name: 'VideoPlayer',
     component: Mv
+  }, {
+    path: '/playlist',
+    name: 'PlayList',
+    component: PlayList
   }]
 });

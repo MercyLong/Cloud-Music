@@ -34,3 +34,25 @@ export const loadMore = {
     }
   }
 };
+export const replaceImageUrl = {
+  tinyImageUrl(path, size = 40) {
+    let prefix = `?imageView&thumbnail=${size}x0&quality=75&tostatic=0`;
+    return `${path}${prefix}`;
+  },
+  isSupportImageType(type) {
+    let imageType = `image/${type}`;
+    let canvas = document.createElement('canvas');
+    let base64Url = canvas.toDataURL(imageType);
+    let isSupport = (base64Url.indexOf(imageType) > -1) ? 1 : 0;
+    return isSupport;
+  },
+  //  查看浏览器是否支持webp格式的图片
+  changeImageType(imageUrl, type) {
+    let reg = /\.(\w+)$/;
+    if (this.isSupportImageType(type)) {
+      return imageUrl.replace(reg, `.${type}`);
+    } else {
+      return imageUrl;
+    }
+  }
+};

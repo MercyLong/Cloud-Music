@@ -121,6 +121,16 @@ var fetchMvRecommends = (id) => {
     return result;
   });
 };
+/*
+ **@ 获取歌单详情
+ */
+var fetchPlayListDetail = (id) => {
+  return fetch('GET', api.getPlayListDetail, {
+    id: id
+  }).then((result) => {
+    return result;
+  });
+};
 export {
   fetchRecommendList,
   fetchNewSongList,
@@ -133,5 +143,6 @@ export {
   fetchSongAudioUrl,
   fetchVideoDetail,
   fetchMvComments,
-  fetchMvRecommends
+  fetchMvRecommends,
+  fetchPlayListDetail
 };

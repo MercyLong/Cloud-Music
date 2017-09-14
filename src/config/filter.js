@@ -49,7 +49,14 @@ const formatDate = (timestapm, format) => {
 };
 
 const addMeasurement = (number, offset, word) => {
-
+  let intNumber = parseInt(number);
+  let integer = intNumber / Math.pow(10, offset);
+  if (integer > 10) {
+    let prefixNumber = integer.toFixed(1);
+    return `${prefixNumber}${word}`;
+  } else {
+    return intNumber;
+  }
 };
 
 export {

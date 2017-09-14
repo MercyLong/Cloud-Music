@@ -37,7 +37,6 @@
         <span class="second"></span>
         <span class="thrid"></span>
         <span class="fourth"></span>
-        <span class="fifth"></span>
       </div>
     </div>
   </div>

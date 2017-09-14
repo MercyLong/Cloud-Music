@@ -15,7 +15,7 @@
   </div>
 </template>
 <script type="text/javascript">
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapMutations } from 'vuex';
 import mvDetail from './children/mvDetail';
 import mvComments from './children/mvComments';
 import mvRecommends from './children/mvRecommends';
@@ -49,7 +49,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['currentVideoInfo'])
+    ...mapState(['currentVideoInfo', 'audioElement'])
   },
   filters: {
     addPrefix(url) {
@@ -60,6 +60,7 @@ export default {
   },
   methods: {
     ...mapActions(['fetchVideoDetailByAction']),
+    ...mapMutations(['SET_PLAYING_STATUS']),
     async initVideoDetail() {
       this.fetchVideoDetailByAction(this.videoId);
     },
@@ -72,6 +73,8 @@ export default {
     playingVideo() {
       this.controlControlBar(true);
       this.isShowPlayIcon = false;
+      this.audioElement && this.audioElement.pause();
+      this.SET_PLAYING_STATUS(false);
       document.getElementById('video-player').play();
     },
     async initMvRecommends() {

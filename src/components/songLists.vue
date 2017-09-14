@@ -31,7 +31,7 @@ import { _setLocalHistoryForCurrent, _setCurrentSongInLocal } from 'config/util'
 export default {
   props: ['songLists'],
   methods: {
-    ...mapMutations(['SET_PLAYING_STATUS']),
+    ...mapMutations(['SET_PLAYING_STATUS', 'SET_PLAY_LIST_TYPE']),
     gotoSongPlayer(id, item) {
       this.$router.push({
         path: 'song',
@@ -39,8 +39,11 @@ export default {
           id: id
         }
       });
-      _setCurrentSongInLocal(item);
       _setLocalHistoryForCurrent('historyStack', item);
+      console.log(item);
+      _setCurrentSongInLocal(item);
+      // 设置成本地歌单
+      this.SET_PLAY_LIST_TYPE(false);
     }
   }
 };
@@ -51,6 +54,11 @@ export default {
   .new-song-link {
     display: flex;
     padding-left: 10px;
+    align-items: center;
+    .new-song-item {
+      height: 55px;
+      box-sizing: border-box;
+    }
     .new-song-item-content {
       flex: 1;
       width: 0;
@@ -84,7 +92,6 @@ export default {
       align-items: center;
       padding: 0 10px;
       .new-song-item-icon {
-
         display: inline-block;
         width: 22px;
         height: 22px;

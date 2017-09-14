@@ -5,6 +5,7 @@
 </template>
 <script type="text/javascript">
 import { mapState, mapMutations } from 'vuex';
+import { _setCurrentSongInLocal } from 'config/util';
 export default {
   computed: {
     ...mapState(['currentPlayLists', 'songAudioUrl', 'loopStatus', 'currentSongInfo'])
@@ -54,13 +55,15 @@ export default {
         // 单曲循环，重新播放
         document.getElementById('song-player-audio').play();
       } else {
-        var songId = this.currentPlayLists[songIndex].song.id;
+        let songInfo = this.currentPlayLists[songIndex];
+        let songId = songInfo.song.id;
         this.$router.replace({
           path: 'song',
           query: {
             id: songId
           }
         });
+        _setCurrentSongInLocal(songInfo);
       }
     }
   }

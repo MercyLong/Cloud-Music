@@ -32,11 +32,11 @@
       <div class="audio-current-mask"></div>
       <ul class="audio-current-list">
         <li :class="item.song.id == currentSongInfo.id?'active':''" class="audio-current-item border-bt" v-for="item in currentPlayLists">
-          <div @click="gotoSongFromList(item.song.id)" class="item-name-wrapper">
+          <div @click="gotoSongFromList(item.song.id,item)" class="item-name-wrapper">
             <i v-if="item.song.id == currentSongInfo.id" class="iconfont">&#xe671;</i>
             <span class="name">{{item.song.name}}</span>
             <span>-</span>
-            <span class="artists">{{item.song.artists&&item.song.artists[0].name}}</span>
+            <span class="artists">{{item.song.artists&&item.song.artists[0].name||item.song.ar&&item.song.ar[0].name}}</span>
           </div>
           <i @click="removeFromList(item.song.id)" class="iconfont fork">&#xe612;</i>
         </li>
@@ -47,14 +47,22 @@
 </template>
 <script type="text/javascript">
 import { mapState, mapMutations } from 'vuex';
-import { _removeLocalHistoryForCurrent } from 'config/util';
+import { _removeLocalHistoryForCurrent, _setCurrentSongInLocal } from 'config/util';
 export default {
   created() {
-    let songListHistory = JSON.parse(localStorage.getItem('historyStack'));
+    let songListHistory = this.playListType ? this.processDataStucture(this.currentPlayListDetail.tracks) : JSON.parse(localStorage.getItem('historyStack'));
     this.SET_CURRENT_PLAY_LIST(songListHistory);
   },
   methods: {
-    ...mapMutations(['SET_PLAYING_STATUS', 'CHANGE_LOOP_STATUS', 'SET_CURRENT_PLAY_LIST', 'SET_AUDIO_TIME']),
+    ...mapMutations(['SET_PLAYING_STATUS', 'CHANGE_LOOP_STATUS', 'SET_CURRENT_PLAY_LIST', 'SET_AUDIO_TIME', 'SET_CURRENT_SONG_INFO']),
+    processDataStucture(list) {
+      return list.map((item, idx) => {
+        item.artists = item.ar;
+        return {
+          song: item
+        };
+      });
+    },
     setPlayingStatus() {
       var audioElem = document.getElementById('song-player-audio');
       this.isPlaying ? audioElem.pause() : audioElem.play();
@@ -74,14 +82,13 @@ export default {
       let duration = this.currentSongInfo.dt / 1000;
       let currentTime = parseInt(duration * percent);
       this.SET_AUDIO_TIME(currentTime);
-      var audioElem = document.getElementById('song-player-audio');
-      audioElem.currentTime = currentTime;
-      this.resetLRC(currentTime);
+      this.audioElement.currentTime = currentTime;
+      this.resetLRC(currentTime, 2);
     },
-    resetLRC(currentTime) {
+    resetLRC(currentTime, offset) {
       let offsetHeight = 0;
       this.lrcInfo.forEach((item, idx) => {
-        if ((item.timeStamp <= currentTime) && (idx - 2 > 0)) {
+        if ((item.timeStamp <= currentTime) && (idx - offset > 0)) {
           let elemLRC = document.querySelectorAll('.inner');
           offsetHeight += elemLRC[idx - 2].offsetHeight;
         }
@@ -96,12 +103,16 @@ export default {
           this.clickButton('next');
           this.hideSongLists();
         };
-        this.SET_CURRENT_PLAY_LIST(leftPlayLists);
       } else {
+        // 清除到最后一首歌时
         this.$router.push({
           path: '/'
         });
+        this.SET_PLAYING_STATUS(false);
+        this.SET_CURRENT_SONG_INFO({});
+        localStorage.removeItem('currentSong');
       }
+      this.SET_CURRENT_PLAY_LIST(leftPlayLists);
     },
     showSongLists() {
       this.isShowListsPanel = true;
@@ -113,8 +124,8 @@ export default {
       let idx;
       let len = this.currentPlayLists.length;
       if (len === 1) {
-        let elem = document.getElementById('song-player-audio');
-        elem.play();
+        // let elem = document.getElementById('song-player-audio');
+        this.audioElement.play();
         this.SET_PLAYING_STATUS(true);
         return;
       }
@@ -135,22 +146,24 @@ export default {
         case 2:
           idx = Math.floor(Math.random() * len);
       };
-      let songId = this.currentPlayLists[idx].song.id;
-      this.gotoSong(songId);
+      let songInfo = this.currentPlayLists[idx];
+      let songId = songInfo.song.id;
+      this.gotoSong(songId, songInfo);
       this.SET_PLAYING_STATUS(true);
     },
-    gotoSongFromList(songId) {
-      this.gotoSong(songId);
+    gotoSongFromList(songId, item) {
+      this.gotoSong(songId, item);
       this.hideSongLists();
       this.SET_PLAYING_STATUS(true);
     },
-    gotoSong(songId) {
+    gotoSong(songId, item) {
       this.$router.replace({
         path: 'song',
         query: {
           id: songId
         }
       });
+      _setCurrentSongInLocal(item);
     }
   },
   data() {
@@ -159,7 +172,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['currentSongInfo', 'audioCurrentTime', 'isPlaying', 'loopInitData', 'loopStatus', 'currentPlayLists', 'lrcInfo']),
+    ...mapState(['currentSongInfo', 'audioCurrentTime', 'isPlaying', 'loopInitData', 'loopStatus', 'currentPlayLists', 'lrcInfo', 'audioElement', 'currentPlayListDetail', 'playListType']),
     readyWidth() {
       var currentTime = parseInt(this.audioCurrentTime);
       var totalTime = parseInt(this.currentSongInfo.dt / 1000);
