@@ -20,6 +20,10 @@ export function CreateStore() {
       currentSongInfo: {},
       // 当前播放音乐的id
       currentSongId: null,
+      // 歌词偏移量
+      offset: 0,
+      // 歌词偏移高度
+      offsetHeight: 0,
       // 是否正在播放
       isPlaying: false,
       // 设置音频的URL

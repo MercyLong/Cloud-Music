@@ -7,18 +7,20 @@
 import { mapState, mapMutations } from 'vuex';
 import { _setCurrentSongInLocal } from 'config/util';
 export default {
+  data() {
+    return {};
+  },
   computed: {
-    ...mapState(['currentPlayLists', 'songAudioUrl', 'loopStatus', 'currentSongInfo'])
+    ...mapState(['currentPlayLists', 'songAudioUrl', 'loopStatus', 'currentSongInfo', 'audioElement'])
   },
   methods: {
-    ...mapMutations(['SET_AUDIO_TIME', 'SET_PLAYING_STATUS']),
+    ...mapMutations(['SET_AUDIO_TIME', 'SET_PLAYING_STATUS', 'SET_LRC_OFFSETHEIGHT']),
     audioUpdateTime() {
-      var audioElem = document.getElementById('song-player-audio');
-      if (audioElem) {
-        var current = audioElem.currentTime;
+      if (this.audioElement) {
+        let current = this.audioElement.currentTime;
         // 添加0.2秒触发条件到VUE渲染的时间
-        this.current = (current + 0.2 < (this.currentSongInfo.dt / 1000)) ? current + 0.2 : current;
-        this.SET_AUDIO_TIME(this.current);
+        current = (current + 0.2 < (this.currentSongInfo.dt / 1000)) ? current + 0.2 : current;
+        this.SET_AUDIO_TIME(current);
         // 根据current找到当前所在的offset
       }
     },
@@ -40,7 +42,7 @@ export default {
           songIndex = idx;
           break;
         case 2:
-          songIndex = Math.floor(Math.random(0, len));
+          songIndex = Math.floor(Math.random(0, len) * (len));
           break;
       };
       return songIndex;
@@ -53,7 +55,8 @@ export default {
     gotoContinue(songIndex) {
       if (this.loopStatus === 1 || this.currentPlayLists.length === 1) {
         // 单曲循环，重新播放
-        document.getElementById('song-player-audio').play();
+        this.SET_LRC_OFFSETHEIGHT(0);
+        this.audioElement.play();
       } else {
         let songInfo = this.currentPlayLists[songIndex];
         let songId = songInfo.song.id;

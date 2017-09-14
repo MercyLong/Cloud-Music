@@ -16,7 +16,7 @@
         <div v-if="!item.beReplied.length" class="no-reply-content">
           {{item.content}}
         </div>
-        <div v-if="item.beReplied.length" class="reply-content">
+        <div v-else="item.beReplied.length" class="reply-content">
           回复<span class="reply-user">@{{item.beReplied[0].user.nickname}}：</span>
           <span>{{item.content}}</span>
           <div class="reply-more border-1px">

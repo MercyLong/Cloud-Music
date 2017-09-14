@@ -44,9 +44,7 @@ export default {
   },
   data() {
     return {
-      songId: this.$route.query.id,
-      offset: 0,
-      offsetHeight: 0
+      songId: this.$route.query.id
     };
   },
   components: {
@@ -58,26 +56,26 @@ export default {
       if (this.lrcInfo.length) {
         this.lrcInfo.forEach((item, idx) => {
           if ((item.timeStamp <= newVal) && (idx - 1 > 0)) {
-            this.offset = idx - 1;
-          };
+            this.SET_LRC_OFFSET(idx - 1);
+          }
         });
       };
     },
     offset(newVal, oldVal) {
       var elemLRC = document.querySelectorAll('.inner');
       var currentHeight = elemLRC[newVal - 1].offsetHeight;
-      this.offsetHeight += currentHeight;
+      this.SET_LRC_OFFSETHEIGHT(this.offsetHeight + currentHeight);
     },
     songId(newVal, oldVal) {
       this.initSongContent();
     },
     $route(newVal, oldVal) {
       this.songId = newVal.query.id;
-      this.offsetHeight = 0;
+      this.SET_LRC_OFFSETHEIGHT(0);
     }
   },
   computed: {
-    ...mapState(['currentSongInfo', 'isPlaying', 'loopStatus', 'currentSongId', 'currentPlayLists', 'audioCurrentTime', 'lrcInfo', 'audioElement']),
+    ...mapState(['currentSongInfo', 'isPlaying', 'loopStatus', 'currentSongId', 'currentPlayLists', 'audioCurrentTime', 'lrcInfo', 'audioElement', 'offset', 'offsetHeight']),
     songInfo() {
       return this.currentSongInfo;
     },
@@ -87,14 +85,14 @@ export default {
   },
   methods: {
     ...mapActions(['fetchSongDetailByAction']),
-    ...mapMutations(['SET_AUDIO_TIME', 'SET_PLAYING_STATUS', 'SET_CURRENT_SONG_ID', 'SET_AUDIO_URL', 'SET_LRC_INFO', 'SET_AUDIO_ELEMENT']),
+    ...mapMutations(['SET_AUDIO_TIME', 'SET_PLAYING_STATUS', 'SET_CURRENT_SONG_ID', 'SET_AUDIO_URL', 'SET_LRC_INFO', 'SET_AUDIO_ELEMENT', 'SET_LRC_OFFSET', 'SET_LRC_OFFSETHEIGHT']),
     initSongContent() {
       this.initSongDetailInfo();
       this.initSongLRCInfo();
       this.initSongAudioUrl();
     },
     changeLRC(offset) {
-      this.offsetHeight = offset;
+      this.SET_LRC_OFFSETHEIGHT(offset);
     },
     async initSongDetailInfo() {
       this.fetchSongDetailByAction(this.songId);
@@ -137,8 +135,10 @@ export default {
     if ((this.songId) !== this.currentSongInfo.id) {
       this.initSongContent();
       this.SET_PLAYING_STATUS(true);
+      this.SET_LRC_OFFSETHEIGHT(0);
+      this.SET_LRC_OFFSET(0);
     } else {
-      this.$refs['audioControlElement'].resetLRC(this.audioCurrentTime, 2);
+      this.$refs['audioControlElement'].resetLRC(this.audioCurrentTime);
     }
   }
 };

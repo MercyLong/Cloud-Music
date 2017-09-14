@@ -13,7 +13,9 @@ import {
   SET_RUNNING_STATUS,
   SET_CURRENT_PLAY_LIST_DETAIL,
   SET_AUDIO_ELEMENT,
-  SET_PLAY_LIST_TYPE
+  SET_PLAY_LIST_TYPE,
+  SET_LRC_OFFSET,
+  SET_LRC_OFFSETHEIGHT
 } from './mutations-type.js';
 export default {
   // 改变主页tab栏
@@ -62,5 +64,11 @@ export default {
   },
   [SET_PLAY_LIST_TYPE](state, boolean) {
     state.playListType = boolean;
+  },
+  [SET_LRC_OFFSET](state, number) {
+    state.offset = number;
+  },
+  [SET_LRC_OFFSETHEIGHT](state, number) {
+    state.offsetHeight = number;
   }
 };

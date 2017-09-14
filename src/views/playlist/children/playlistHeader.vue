@@ -74,7 +74,7 @@ export default {
         align-items: center;
         position: relative;
         margin-top: 15px;
-        color: hsla(0, 0%, 100%, .7);
+        color: hsla(0, 0%, 100%, .5);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;

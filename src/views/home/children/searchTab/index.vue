@@ -14,6 +14,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .search-tab-wrapper {
+
   transform: translate3d(0, 0, 0);
 }
 

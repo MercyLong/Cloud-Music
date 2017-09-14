@@ -53,6 +53,9 @@ export default {
     let songListHistory = this.playListType ? this.processDataStucture(this.currentPlayListDetail.tracks) : JSON.parse(localStorage.getItem('historyStack'));
     this.SET_CURRENT_PLAY_LIST(songListHistory);
   },
+  watch: {
+
+  },
   methods: {
     ...mapMutations(['SET_PLAYING_STATUS', 'CHANGE_LOOP_STATUS', 'SET_CURRENT_PLAY_LIST', 'SET_AUDIO_TIME', 'SET_CURRENT_SONG_INFO']),
     processDataStucture(list) {
@@ -64,8 +67,7 @@ export default {
       });
     },
     setPlayingStatus() {
-      var audioElem = document.getElementById('song-player-audio');
-      this.isPlaying ? audioElem.pause() : audioElem.play();
+      this.isPlaying ? this.audioElement.pause() : this.audioElement.play();
       this.SET_PLAYING_STATUS(!this.isPlaying);
     },
     changeLoopStatus(loop) {
@@ -88,9 +90,9 @@ export default {
     resetLRC(currentTime, offset) {
       let offsetHeight = 0;
       this.lrcInfo.forEach((item, idx) => {
-        if ((item.timeStamp <= currentTime) && (idx - offset > 0)) {
+        if ((item.timeStamp <= currentTime) && (idx - 2 > 0)) {
           let elemLRC = document.querySelectorAll('.inner');
-          offsetHeight += elemLRC[idx - 2].offsetHeight;
+          offsetHeight += elemLRC[idx - 3].offsetHeight;
         }
       });
       this.$emit('RESET-LRC', offsetHeight);
