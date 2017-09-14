@@ -40,7 +40,6 @@ export default {
         }
       });
       _setLocalHistoryForCurrent('historyStack', item);
-      console.log(item);
       _setCurrentSongInLocal(item);
       // 设置成本地歌单
       this.SET_PLAY_LIST_TYPE(false);

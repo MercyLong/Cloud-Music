@@ -21,9 +21,11 @@
         </div>
         <div class="lrc-info-wrapper">
           <div class="lrc-info-scroll">
-            <div :style="{transform:`translateY(-${offsetHeight}px)`}" class="inner-scroll-wrapper">
-              <div :class="item.timeStamp <= audioCurrentTime &&(!lrcInfo[$index + 1]||( audioCurrentTime <= lrcInfo[$index + 1].timeStamp)) ?'active':''" v-for="(item ,$index) in lrcInfo" class="inner lrc-info-text">{{item.text}}</div>
+            <div v-if="lrcInfo && lrcInfo.length > 0" :style="{transform:`translateY(-${offsetHeight}px)`}" class="inner-scroll-wrapper">
+              <div :class="item.timeStamp <= audioCurrentTime &&(!lrcInfo[$index + 1]||( audioCurrentTime <= lrcInfo[$index + 1].timeStamp)) ?'active':''" v-for="(item ,$index) in lrcInfo" class="inner lrc-info-text">{{item.text}}
+              </div>
             </div>
+            <div v-else class="no-lrc">该歌曲暂无歌词</div>
           </div>
         </div>
       </div>
@@ -63,8 +65,10 @@ export default {
     },
     offset(newVal, oldVal) {
       var elemLRC = document.querySelectorAll('.inner');
-      var currentHeight = elemLRC[newVal - 1].offsetHeight;
-      this.SET_LRC_OFFSETHEIGHT(this.offsetHeight + currentHeight);
+      if (elemLRC) {
+        var currentHeight = elemLRC[newVal - 1].offsetHeight;
+        this.SET_LRC_OFFSETHEIGHT(this.offsetHeight + currentHeight);
+      }
     },
     songId(newVal, oldVal) {
       this.initSongContent();
@@ -118,6 +122,8 @@ export default {
           return Boolean(item.text) === true;
         });
         this.SET_LRC_INFO(infoArray);
+      } else {
+        this.SET_LRC_INFO([]);
       }
     },
     async initSongAudioUrl() {
@@ -136,7 +142,6 @@ export default {
       this.initSongContent();
       this.SET_PLAYING_STATUS(true);
       this.SET_LRC_OFFSETHEIGHT(0);
-      this.SET_LRC_OFFSET(0);
     } else {
       this.$refs['audioControlElement'].resetLRC(this.audioCurrentTime);
     }
@@ -246,6 +251,9 @@ export default {
       }
       .lrc-info-wrapper {
         margin-top: 14px;
+        .no-lrc {
+          margin-top: 30px;
+        }
         .lrc-info-scroll {
           line-height: 1.5;
           font-size: 16px;

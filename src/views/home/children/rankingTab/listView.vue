@@ -1,5 +1,5 @@
 <template>
-  <div class="list-view-wrapper">
+  <div @click="gotoRankDetail(rankListInfo)" class="list-view-wrapper">
     <div class="cover-img-wrapper">
       <img class="cover-img" :src="coverImage">
     </div>
@@ -32,12 +32,21 @@ export default {
   },
   methods: {
     async initTopList(idx) {
-      var res = await fetchTopList(idx);
+      let res = await fetchTopList(idx);
       if (res.code === 200) {
-        var fullTopLists = res.result && res.result.tracks;
+        this.rankListInfo = res.result;
+        let fullTopLists = this.rankListInfo && this.rankListInfo.tracks;
         this.topLists = fullTopLists.slice(0, 3);
         this.coverImage = res.result && replaceImageUrl.changeImageType(res.result.coverImgUrl, 'webp');
       };
+    },
+    gotoRankDetail(item) {
+      this.$router.push({
+        path: 'playlist',
+        query: {
+          id: item.id
+        }
+      });
     }
   },
   mounted() {

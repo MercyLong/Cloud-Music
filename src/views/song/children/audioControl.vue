@@ -32,7 +32,7 @@
       <div class="audio-current-mask"></div>
       <ul class="audio-current-list">
         <li :class="item.song.id == currentSongInfo.id?'active':''" class="audio-current-item border-bt" v-for="item in currentPlayLists">
-          <div @click="gotoSongFromList(item.song.id,item)" class="item-name-wrapper">
+          <div @click="gotoSongFromList(item.song.id,item)" class="item-name-wrapper first-line">
             <i v-if="item.song.id == currentSongInfo.id" class="iconfont">&#xe671;</i>
             <span class="name">{{item.song.name}}</span>
             <span>-</span>

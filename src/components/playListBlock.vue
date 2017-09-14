@@ -1,6 +1,6 @@
 <template>
   <div class="recommend-list">
-    <router-link :key="item.id" :to="{path:'playlist',query:{id:item.id}}" class="recommend-item" v-for="item in recommendList">
+    <div @click="gotoPlayListDetail(item)" :key="item.id" :to="{path:'playlist',query:{id:item.id}}" class="recommend-item" v-for="item in recommendList">
       <div :class="item.playCount?'mask':''" class="recommend-item-img">
         <img @load="needReload?completeLoad(item):()=>{}" :src="`${item.picTinyUrl}`">
         <span v-if="item.playCount" class="recommend-like-num">
@@ -8,11 +8,12 @@
             {{item.playCount| addMeasurement(4,'万')}}</span>
       </div>
       <div class="recommend-item-text">{{item.name}}</div>
-    </router-link>
+    </div>
   </div>
 </template>
 <script type="text/javascript">
 import { replaceImageUrl } from 'config/mixin';
+// 歌单跳转的时候进行本地缓存。再下一个落地页提取
 export default {
   mixins: {
     replaceImageUrl
@@ -21,6 +22,16 @@ export default {
   methods: {
     completeLoad(item) {
       item.picTinyUrl = replaceImageUrl.changeImageType((item.picUrl), 'webp');
+    },
+    gotoPlayListDetail(item) {
+      // 1.设置本地缓存,基本信息不需要http
+      // 2.跳转到歌单详情页
+      this.$router.push({
+        path: 'playlist',
+        query: {
+          id: item.id
+        }
+      });
     }
   }
 };
