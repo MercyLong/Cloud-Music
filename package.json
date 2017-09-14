@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "vue application for cloud music",
   "author": "liangxiang@baidu.com",
-  "private": true,
   "scripts": {
     "dev": "node build/dev-server.js & node dep/NeteaseCloudMusicApi/app.js",
     "start": "node build/dev-server.js",
