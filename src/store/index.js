@@ -56,7 +56,9 @@ export function CreateStore() {
       // 当前视频信息
       currentVideoInfo: {},
       // 当前播放列表类型 true.歌单类型 false.历史信息（本地信息）
-      playListType: false
+      playListType: false,
+      // 当前排行榜单
+      currentRankInfo: {}
     },
     actions,
     mutations

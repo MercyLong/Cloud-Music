@@ -39,8 +39,8 @@ export default {
           id: id
         }
       });
-      _setLocalHistoryForCurrent('historyStack', item);
-      _setCurrentSongInLocal(item);
+      _setLocalHistoryForCurrent('historyStack', item.song);
+      _setCurrentSongInLocal(item.song);
       // 设置成本地歌单
       this.SET_PLAY_LIST_TYPE(false);
     }

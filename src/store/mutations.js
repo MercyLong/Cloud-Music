@@ -15,7 +15,8 @@ import {
   SET_AUDIO_ELEMENT,
   SET_PLAY_LIST_TYPE,
   SET_LRC_OFFSET,
-  SET_LRC_OFFSETHEIGHT
+  SET_LRC_OFFSETHEIGHT,
+  SET_CURRENT_RANK_LIST_INFO
 } from './mutations-type.js';
 export default {
   // 改变主页tab栏
@@ -70,5 +71,8 @@ export default {
   },
   [SET_LRC_OFFSETHEIGHT](state, number) {
     state.offsetHeight = number;
+  },
+  [SET_CURRENT_RANK_LIST_INFO](state, info) {
+    state.currentRankInfo = Object.assign({}, info);
   }
 };

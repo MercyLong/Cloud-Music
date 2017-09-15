@@ -3,7 +3,7 @@ export const loadMore = {
     'load-more': {
       bind: (el, binding) => {
         const windowHeight = window.screen.height;
-        const scrollReducer = 0;
+        const scrollReducer = 150;
         let offset;
         let scrollTop;
         let height;

@@ -31,14 +31,14 @@
     <div :class="isShowListsPanel?'active':''" class="audio-song-list-panel">
       <div class="audio-current-mask"></div>
       <ul class="audio-current-list">
-        <li :class="item.song.id == currentSongInfo.id?'active':''" class="audio-current-item border-bt" v-for="item in currentPlayLists">
-          <div @click="gotoSongFromList(item.song.id,item)" class="item-name-wrapper first-line">
-            <i v-if="item.song.id == currentSongInfo.id" class="iconfont">&#xe671;</i>
-            <span class="name">{{item.song.name}}</span>
+        <li :class="item.id == currentSongInfo.id?'active':''" class="audio-current-item border-bt" v-for="item in currentPlayLists">
+          <div @click="gotoSongFromList(item.id,item)" class="item-name-wrapper first-line">
+            <i v-if="item.id == currentSongInfo.id" class="iconfont">&#xe671;</i>
+            <span class="name">{{item.name}}</span>
             <span>-</span>
-            <span class="artists">{{item.song.artists&&item.song.artists[0].name||item.song.ar&&item.song.ar[0].name}}</span>
+            <span class="artists">{{item.artists&&item.artists[0].name||item.ar&&item.ar[0].name}}</span>
           </div>
-          <i @click="removeFromList(item.song.id)" class="iconfont fork">&#xe612;</i>
+          <i @click="removeFromList(item.id)" class="iconfont fork">&#xe612;</i>
         </li>
       </ul>
       <div @click="hideSongLists" class="close-btn border-tp">关闭</div>
@@ -50,7 +50,8 @@ import { mapState, mapMutations } from 'vuex';
 import { _removeLocalHistoryForCurrent, _setCurrentSongInLocal } from 'config/util';
 export default {
   created() {
-    let songListHistory = this.playListType ? this.processDataStucture(this.currentPlayListDetail.tracks) : JSON.parse(localStorage.getItem('historyStack'));
+    // 根据歌单类型,判断是读取播放历史还是当前歌单
+    let songListHistory = this.playListType ? this.currentPlayLists : JSON.parse(localStorage.getItem('historyStack'));
     this.SET_CURRENT_PLAY_LIST(songListHistory);
   },
   watch: {
@@ -97,13 +98,18 @@ export default {
       });
       this.$emit('RESET-LRC', offsetHeight);
     },
+    filterPlayList(songId) {
+      return this.currentPlayLists.filter((item) => {
+        return item.id !== songId;
+      });
+    },
     removeFromList(songId) {
       // 如果删除的是当前播放的音乐，跳到下一首
-      let leftPlayLists = _removeLocalHistoryForCurrent('historyStack', songId);
+      let leftPlayLists = this.playListType ? this.filterPlayList(songId) : _removeLocalHistoryForCurrent('historyStack', songId);
       if (leftPlayLists.length) {
         if (songId === this.currentSongInfo.id) {
-          this.clickButton('next');
           this.hideSongLists();
+          this.clickButton('next');
         };
       } else {
         // 清除到最后一首歌时
@@ -132,7 +138,7 @@ export default {
         return;
       }
       this.currentPlayLists.forEach((item, index) => {
-        if (item.song.id === this.currentSongInfo.id) {
+        if (item.id === this.currentSongInfo.id) {
           idx = index;
         };
       });
@@ -149,7 +155,7 @@ export default {
           idx = Math.floor(Math.random() * len);
       };
       let songInfo = this.currentPlayLists[idx];
-      let songId = songInfo.song.id;
+      let songId = songInfo.id;
       this.gotoSong(songId, songInfo);
       this.SET_PLAYING_STATUS(true);
     },
@@ -330,18 +336,7 @@ export default {
           border: 6px solid #fff;
           border-radius: 50%;
           background: red;
-        } // &:after {
-        //   transform: translate(5px, -7px);
-        //   position: absolute;
-        //   display: block;
-        //   right: 0;
-        //   width: 2px;
-        //   height: 2px;
-        //   border: 7px solid #fff;
-        //   content: '';
-        //   border-radius: 50%;
-        //   background: transparent;
-        // }
+        }
       }
     }
   }

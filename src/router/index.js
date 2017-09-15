@@ -7,6 +7,7 @@ import RankingTab from '@/views/home/children/rankingTab';
 import SearchTab from '@/views/home/children/searchTab';
 import Mv from '@/views/mv/mv';
 import PlayList from '@/views/playlist/playlist';
+import RankList from '@/views/ranklist/ranklist';
 Vue.use(Router);
 export default new Router({
   mode: 'history',
@@ -40,6 +41,10 @@ export default new Router({
     path: '/playlist',
     name: 'PlayList',
     component: PlayList
+  }, {
+    path: '/ranklist',
+    name: 'RankList',
+    component: RankList
   }],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

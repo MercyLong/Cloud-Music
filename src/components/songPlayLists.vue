@@ -7,11 +7,11 @@
           <div @click="gotoSongFromPlayList(item)" class="item-name">
             <div class="artist-name first-line">{{item.name}}</div>
             <div class="artist-list first-line">
-              <span v-for="(artist,index) in item.ar">
+              <span v-for="(artist,index) in (item.ar||item.artists)">
             <span v-if="index > 0">/</span> {{artist.name}}
               </span>
               <span>-</span>
-              <span>{{item.al.name}}</span>
+              <span>{{(item.al&&item.al.name)||item.name}}</span>
             </div>
           </div>
           <i @click="gotoMv(item.mv)" v-if="item.mv" class="iconfont mv">&#xe601;</i>
@@ -26,8 +26,11 @@ import { mapMutations } from 'vuex';
 import { _setLocalHistoryForCurrent } from 'config/util';
 export default {
   props: ['songPlayLists'],
+  mounted() {
+
+  },
   methods: {
-    ...mapMutations(['SET_PLAY_LIST_TYPE']),
+    ...mapMutations(['SET_PLAY_LIST_TYPE', 'SET_CURRENT_PLAY_LIST']),
     gotoMv(mvId) {
       this.$router.push({
         path: '/mv',
@@ -43,9 +46,9 @@ export default {
           id: item.id
         }
       });
-      _setLocalHistoryForCurrent('historyStack', {
-        song: item
-      });
+      console.log(item);
+      _setLocalHistoryForCurrent('historyStack', item);
+      this.SET_CURRENT_PLAY_LIST(this.songPlayLists);
       this.SET_PLAY_LIST_TYPE(true);
     }
   }

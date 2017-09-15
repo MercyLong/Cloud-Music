@@ -5,7 +5,7 @@
     <div class="playlist-header">
       <div class="img-wrapper">
         <img :src="currentPlayListDetail.coverImgUrl">
-        <span class="play-number">
+        <span v-if="currentPlayListDetail.playCount" class="play-number">
         <i class="iconfont">&#xe600;</i>
         {{currentPlayListDetail.playCount| addMeasurement(4,'万')}}
         </span>

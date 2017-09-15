@@ -29,7 +29,7 @@ export default {
       let songIndex;
       let len = this.currentPlayLists.length;
       this.currentPlayLists.forEach((item, index) => {
-        if (item.song.id === parseInt(this.currentSongInfo.id)) {
+        if (item.id === parseInt(this.currentSongInfo.id)) {
           idx = index;
         };
       });
@@ -59,7 +59,7 @@ export default {
         this.audioElement.play();
       } else {
         let songInfo = this.currentPlayLists[songIndex];
-        let songId = songInfo.song.id;
+        let songId = songInfo.id;
         this.$router.replace({
           path: 'song',
           query: {

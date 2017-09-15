@@ -34,7 +34,9 @@
         </svg>
       </div>
       <div class="openapp">
-        打开APP，发现更多好音乐 >
+        <a href="https://itunes.apple.com/app/id590338362">
+           打开APP，发现更多好音乐 >
+        </a>
       </div>
       <p class="copyright">网易公司版权所有©1997-2017 杭州乐读科技有限公司运营</p>
     </div>
@@ -56,8 +58,10 @@ export default {};
     border: 1px solid #d33a31;
     border-radius: 38px;
     font-size: 16px;
-    color: #d33a31;
     margin: 15px 37px 5px;
+    a {
+      color: #d33a31;
+    }
   }
   .copyright {
     color: #888;

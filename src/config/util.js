@@ -4,7 +4,7 @@ export function _setLocalHistoryForCurrent(key, item) {
   // 如果id存在数组,先剔除,后push
 
   songListsHistory = songListsHistory.filter((val, idx) => {
-    return (val.id || val.song.id) !== item.song.id;
+    return (val.id) !== item.id;
   });
   songListsHistory.push(item);
   localStorage.setItem(key, JSON.stringify(songListsHistory));
@@ -14,16 +14,15 @@ export function _removeLocalHistoryForCurrent(key, id) {
   songListsHistory = songListsHistory ? JSON.parse(songListsHistory) : [];
   // 如果id存在数组,先剔除,后push
   songListsHistory = songListsHistory.filter((val, idx) => {
-    return val.song.id !== id;
+    return val.id !== id;
   });
   // 修改本地存储
   localStorage.setItem(key, JSON.stringify(songListsHistory));
   return songListsHistory;
 };
 export function _setCurrentSongInLocal(songInfo) {
-  console.log(songInfo);
-  if (songInfo.song) {
-    localStorage.setItem('currentSong', JSON.stringify(songInfo.song));
+  if (songInfo) {
+    localStorage.setItem('currentSong', JSON.stringify(songInfo));
   };
 };
 

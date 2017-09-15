@@ -19,6 +19,7 @@
 // 根据网易云音乐的API,不同的榜单是通过传入不同的idx
 import { fetchTopList } from 'service';
 import { replaceImageUrl } from 'config/mixin';
+import { mapMutations } from 'vuex';
 export default {
   props: ['listIdx'],
   data() {
@@ -31,6 +32,7 @@ export default {
     replaceImageUrl
   },
   methods: {
+    ...mapMutations(['SET_CURRENT_RANK_LIST_INFO']),
     async initTopList(idx) {
       let res = await fetchTopList(idx);
       if (res.code === 200) {
@@ -41,8 +43,10 @@ export default {
       };
     },
     gotoRankDetail(item) {
+      console.log(this);
+      this.SET_CURRENT_RANK_LIST_INFO(item);
       this.$router.push({
-        path: 'playlist',
+        path: 'ranklist',
         query: {
           id: item.id
         }
