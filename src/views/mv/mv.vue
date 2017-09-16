@@ -109,9 +109,11 @@ export default {
       margin: auto;
     }
     .video-bg {
+      background: #000;
       width: 100%;
       height: 100%;
       .video-player {
+        height: 100%;
         width: 100%;
       }
     }
