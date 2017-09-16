@@ -43,7 +43,6 @@ export default {
       };
     },
     gotoRankDetail(item) {
-      console.log(this);
       this.SET_CURRENT_RANK_LIST_INFO(item);
       this.$router.push({
         path: 'ranklist',

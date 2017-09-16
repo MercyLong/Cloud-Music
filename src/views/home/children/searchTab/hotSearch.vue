@@ -16,7 +16,7 @@
         <ul v-if="searchAlbum && searchAlbum.length > 0" class="search-result-album-list border-bt">
           <li v-for="album in searchAlbum">
             <div class="pic-url cover-url">
-              <img :src="album.picUrl">
+              <img :src="getImageUrl(album.picUrl,100)">
             </div>
             <div class="album-content">
               <div class="album-name f-hide">专辑：{{album.name}}</div>
@@ -32,7 +32,7 @@
         <ul v-if="searchArtist && searchArtist.length > 0" class="search-result-artist-list border-bt">
           <li v-for="artist in searchArtist">
             <div class="pic-url">
-              <img :src="artist.img1v1Url">
+              <img :src="getImageUrl(artist.img1v1Url)">
             </div>
             <div class="album-content">
               <div class="album-name f-hide">歌手：{{artist.name}}</div>
@@ -55,6 +55,8 @@ import { fetchHotSearch, fetchMultiSearchResults, fetchSongSearchResults } from 
 import { mapMutations, mapState } from 'vuex';
 import songLists from 'common/songLists';
 import searchHistory from './searchHistory';
+import { getImageUrl } from 'config/mixin';
+console.log(getImageUrl);
 import mvLists from 'common/mvLists';
 import { _setLocalSearchHistory } from 'config/util';
 export default {
@@ -108,6 +110,7 @@ export default {
       this.getResultsByKeyword(newVal);
     }
   },
+  mixins: [getImageUrl],
   computed: {
     ...mapState(['searchKeywords'])
   },

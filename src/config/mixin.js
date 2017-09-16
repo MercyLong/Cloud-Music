@@ -34,6 +34,15 @@ export const loadMore = {
     }
   }
 };
+
+export const getImageUrl = {
+  methods: {
+    getImageUrl(path, size = 40) {
+      let prefix = `?imageView&thumbnail=${size}x0&quality=75&tostatic=0`;
+      return `${path}${prefix}`;
+    }
+  }
+};
 export const replaceImageUrl = {
   tinyImageUrl(path, size = 40) {
     let prefix = `?imageView&thumbnail=${size}x0&quality=75&tostatic=0`;

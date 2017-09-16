@@ -8,6 +8,7 @@ import SearchTab from '@/views/home/children/searchTab';
 import Mv from '@/views/mv/mv';
 import PlayList from '@/views/playlist/playlist';
 import RankList from '@/views/ranklist/ranklist';
+import Topic from '@/views/topic/topic';
 Vue.use(Router);
 export default new Router({
   mode: 'history',
@@ -45,6 +46,10 @@ export default new Router({
     path: '/ranklist',
     name: 'RankList',
     component: RankList
+  }, {
+    path: '/topic',
+    name: 'Topic',
+    component: Topic
   }],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

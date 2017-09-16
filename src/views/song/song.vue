@@ -1,7 +1,7 @@
 <template>
   <div class="song-player-wrapper">
     <header-top></header-top>
-    <div :style="{backgroundImage:`url(//music.163.com/api/img/blur/${songInfo.al&&(songInfo.al.pic_str||songInfo.al.pic)})`}" class="song-player-bg">
+    <div :style="{backgroundImage:`url(//music.163.com/api/img/blur/${songInfo.al&&(songInfo.al.pic_str||songInfo.al.pic)}?imageView&thumbnail=720x0&quality=75&tostatic=0)`}" class="song-player-bg">
     </div>
     <div class="song-player-info">
       <div class="song-player-disk-wrapper">
@@ -77,6 +77,9 @@ export default {
       this.songId = newVal.query.id;
       this.SET_LRC_OFFSETHEIGHT(0);
     }
+  },
+  mixins: {
+
   },
   computed: {
     ...mapState(['currentSongInfo', 'isPlaying', 'loopStatus', 'currentSongId', 'currentPlayLists', 'audioCurrentTime', 'lrcInfo', 'audioElement', 'offset', 'offsetHeight']),

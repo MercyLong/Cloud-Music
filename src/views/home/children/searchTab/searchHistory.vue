@@ -31,7 +31,6 @@ export default {
       let searchHistory = localStorage.getItem('searchHistory');
       if (searchHistory) {
         this.searchHistory = JSON.parse(searchHistory);
-        // console.log(this.searchHistory);
       }
     },
     setSearchKeyword(keyword) {

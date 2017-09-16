@@ -131,6 +131,14 @@ var fetchPlayListDetail = (id) => {
     return result;
   });
 };
+/*
+ **@ 获取banner位置
+ */
+var fetchBannerList = () => {
+  return fetch('GET', api.getBannerList, {}).then((result) => {
+    return result;
+  });
+};
 export {
   fetchRecommendList,
   fetchNewSongList,
@@ -144,5 +152,6 @@ export {
   fetchVideoDetail,
   fetchMvComments,
   fetchMvRecommends,
-  fetchPlayListDetail
+  fetchPlayListDetail,
+  fetchBannerList
 };

@@ -2,7 +2,7 @@
   <div>
     <div :style="{backgroundImage:`url(${currentRankInfo.coverImgUrl})`}" class="rank-list-wrapper">
       <div class="rank-list-header">
-        <header-top :title="'排行榜'"></header-top>
+        <header-top :has-playing-status="true" :title="'排行榜'"></header-top>
       </div>
       <div class="rank-list-body"></div>
       <div class="rank-list-footer">

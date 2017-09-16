@@ -47,7 +47,7 @@
 </template>
 <script type="text/javascript">
 import { mapState, mapMutations } from 'vuex';
-import { _removeLocalHistoryForCurrent, _setCurrentSongInLocal } from 'config/util';
+import { _removeLocalHistoryForCurrent, _setCurrentSongInLocal, _setLocalHistoryForCurrent } from 'config/util';
 export default {
   created() {
     // 根据歌单类型,判断是读取播放历史还是当前歌单
@@ -165,12 +165,15 @@ export default {
       this.SET_PLAYING_STATUS(true);
     },
     gotoSong(songId, item) {
+      console.log(item);
       this.$router.replace({
         path: 'song',
         query: {
           id: songId
         }
       });
+      // 不仅设置当前本地音乐,同样加入本地历史播放歌单
+      _setLocalHistoryForCurrent('historyStack', item);
       _setCurrentSongInLocal(item);
     }
   },

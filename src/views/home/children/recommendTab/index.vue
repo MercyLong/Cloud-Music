@@ -1,5 +1,6 @@
 <template>
   <div class="recommend-tab-wrapper">
+    <banner-list></banner-list>
     <recommend></recommend>
     <new-song></new-song>
     <footer-wrapper></footer-wrapper>
@@ -8,12 +9,14 @@
 <script type="text/javascript">
 import recommend from './recommend';
 import newSong from './newSong';
+import bannerList from 'common/banner';
 import footerWrapper from './footer';
 export default {
   components: {
     recommend,
     newSong,
-    footerWrapper
+    footerWrapper,
+    bannerList
   }
 };
 

@@ -23,7 +23,7 @@
 </template>
 <script type="text/javascript">
 import { mapMutations } from 'vuex';
-import { _setLocalHistoryForCurrent } from 'config/util';
+import { _setLocalHistoryForCurrent, _setCurrentSongInLocal } from 'config/util';
 export default {
   props: ['songPlayLists'],
   mounted() {
@@ -48,6 +48,7 @@ export default {
       });
       console.log(item);
       _setLocalHistoryForCurrent('historyStack', item);
+      _setCurrentSongInLocal(item);
       this.SET_CURRENT_PLAY_LIST(this.songPlayLists);
       this.SET_PLAY_LIST_TYPE(true);
     }
