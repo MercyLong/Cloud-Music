@@ -56,7 +56,6 @@ import { mapMutations, mapState } from 'vuex';
 import songLists from 'common/songLists';
 import searchHistory from './searchHistory';
 import { getImageUrl } from 'config/mixin';
-console.log(getImageUrl);
 import mvLists from 'common/mvLists';
 import { _setLocalSearchHistory } from 'config/util';
 export default {

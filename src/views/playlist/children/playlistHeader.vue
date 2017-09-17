@@ -4,7 +4,7 @@
     </div>
     <div class="playlist-header">
       <div class="img-wrapper">
-        <img :src="currentPlayListDetail.coverImgUrl">
+        <img :src="getImageUrl(currentPlayListDetail.coverImgUrl,252,'webp')">
         <span v-if="currentPlayListDetail.playCount" class="play-number">
         <i class="iconfont">&#xe600;</i>
         {{currentPlayListDetail.playCount| addMeasurement(4,'万')}}
@@ -15,7 +15,7 @@
         </div>
         <div class="content-artist">
           <span class="artist-url">
-          	<img :src="currentPlayListDetail.creator&&currentPlayListDetail.creator.avatarUrl">
+          	<img :src="getImageUrl(currentPlayListDetail.creator&&currentPlayListDetail.creator.avatarUrl,60,'webp')">
           </span>
           <span class="artist-name">{{currentPlayListDetail.creator && currentPlayListDetail.creator.nickname}}</span>
           <i class="iconfont">&#xe604;</i>
@@ -26,7 +26,9 @@
 </template>
 <script type="text/javascript">
 import { mapState } from 'vuex';
+import { getImageUrl } from 'config/mixin';
 export default {
+  mixins: [getImageUrl],
   computed: {
     ...mapState(['currentPlayListDetail'])
   }
@@ -62,6 +64,7 @@ export default {
     position: relative;
     z-index: 2;
     display: flex;
+    transform: translate3d(0, 0, 0);
     .conent-wrapper {
       margin-left: 15px;
       .content-name {

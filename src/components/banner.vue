@@ -6,7 +6,7 @@
         <!-- <a target="_blank" :href="banner.url">
           <img :src="banner.pic">
         </a> -->
-        <img @click="gotoTopic(banner)" :src="banner.pic">
+        <img @click="gotoTopic(banner)" :src="getImageUrl(banner.pic,800,'webp')">
       </swiper-slide>
       <!-- 这是轮播的小圆点 -->
       <div class="swiper-pagination" slot="pagination"></div>
@@ -15,11 +15,13 @@
 </template>
 <script type="text/javascript">
 import { fetchBannerList } from 'service';
+import { getImageUrl } from 'config/mixin';
 import {
   swiper,
   swiperSlide
 } from 'vue-awesome-swiper';
 export default {
+  mixins: [getImageUrl],
   methods: {
     async initBannerList() {
       var res = await fetchBannerList();

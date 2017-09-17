@@ -46,7 +46,6 @@ export default {
           id: item.id
         }
       });
-      console.log(item);
       _setLocalHistoryForCurrent('historyStack', item);
       _setCurrentSongInLocal(item);
       this.SET_CURRENT_PLAY_LIST(this.songPlayLists);

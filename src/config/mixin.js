@@ -35,11 +35,36 @@ export const loadMore = {
   }
 };
 
+let isSupportImageType = (type) => {
+  let imageType = `image/${type}`;
+  let canvas = document.createElement('canvas');
+  let base64Url = canvas.toDataURL(imageType);
+  let isSupport = (base64Url.indexOf(imageType) > -1) ? 1 : 0;
+  return isSupport;
+};
+let changeImageType = (imageUrl, type) => {
+  let reg = /\.(\w+)$/;
+  if (isSupportImageType(type) && imageUrl) {
+    return {
+      imageUrl: imageUrl.replace(reg, `.${type}`),
+      imageType: type
+    };
+  } else {
+    return {
+      imageUrl: imageUrl,
+      imageType: 'jpg'
+    };
+  }
+};
 export const getImageUrl = {
   methods: {
-    getImageUrl(path, size = 40) {
-      let prefix = `?imageView&thumbnail=${size}x0&quality=75&tostatic=0`;
-      return `${path}${prefix}`;
+    getImageUrl(path, size = 40, type = 'jpg') {
+      if (!path) {
+        return false;
+      };
+      let { imageUrl, imageType } = changeImageType(path, type);
+      let prefix = `?imageView&thumbnail=${size}x0&quality=75&tostatic=0&type=${imageType}`;
+      return `${imageUrl}${prefix}`;
     }
   }
 };

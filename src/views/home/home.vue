@@ -3,7 +3,9 @@
     <download-header></download-header>
     <tab-selector></tab-selector>
     <transition name="router-fade" mode="out-in">
-      <router-view></router-view>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </transition>
   </div>
 </template>

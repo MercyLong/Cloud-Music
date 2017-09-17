@@ -5,7 +5,6 @@ import App from './App';
 import router from './router';
 import * as filters from 'config/filter';
 import VueAwesomeSwiper from 'vue-awesome-swiper';
-console.log(VueAwesomeSwiper);
 import {
   CreateStore
 } from './store';

@@ -1,7 +1,6 @@
 import { fetchSongDetail, fetchVideoDetail, fetchPlayListDetail } from 'service';
 import { SET_CURRENT_SONG_INFO, SET_CURRENT_VIDEO_INFO, SET_CURRENT_PLAY_LIST_DETAIL } from './mutations-type.js';
 import { replaceImageUrl } from 'config/mixin';
-console.log(replaceImageUrl);
 export default {
   async fetchSongDetailByAction({ commit, state }, songId) {
     let res = await fetchSongDetail(songId);

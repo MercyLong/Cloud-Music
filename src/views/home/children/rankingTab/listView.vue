@@ -1,7 +1,7 @@
 <template>
   <div @click="gotoRankDetail(rankListInfo)" class="list-view-wrapper">
     <div class="cover-img-wrapper">
-      <img class="cover-img" :src="coverImage">
+      <img class="cover-img" :src="getImageUrl(coverImage,260,'webp')">
     </div>
     <ul class="top-lists-wrapper border-bt">
       <li v-for="(item,$index) in topLists">
@@ -18,7 +18,7 @@
 <script type="text/javascript">
 // 根据网易云音乐的API,不同的榜单是通过传入不同的idx
 import { fetchTopList } from 'service';
-import { replaceImageUrl } from 'config/mixin';
+import { getImageUrl } from 'config/mixin';
 import { mapMutations } from 'vuex';
 export default {
   props: ['listIdx'],
@@ -28,9 +28,7 @@ export default {
       coverImage: null
     };
   },
-  mixins: {
-    replaceImageUrl
-  },
+  mixins: [getImageUrl],
   methods: {
     ...mapMutations(['SET_CURRENT_RANK_LIST_INFO']),
     async initTopList(idx) {
@@ -39,7 +37,7 @@ export default {
         this.rankListInfo = res.result;
         let fullTopLists = this.rankListInfo && this.rankListInfo.tracks;
         this.topLists = fullTopLists.slice(0, 3);
-        this.coverImage = res.result && replaceImageUrl.changeImageType(res.result.coverImgUrl, 'webp');
+        this.coverImage = res.result.coverImgUrl;
       };
     },
     gotoRankDetail(item) {
