@@ -12,7 +12,7 @@
 </template>
 <script type="text/javascript">
 import hotSearch from './hotSearch';
-import { mapState, mapMutations } from 'vuex';
+import { mapMutations } from 'vuex';
 export default {
   methods: {
     ...mapMutations(['SET_SEARCH_KEYWORD']),
@@ -21,7 +21,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(['searchKeywords']),
+    searchKeywords() {
+      return this.$store.getters.getKeywords;
+    },
     keyword: {
       get() {
         return this.searchKeywords;

@@ -66,6 +66,7 @@ var fetchSongDetail = (songId) => {
   return fetch('GET', api.getSongDetail, {
     ids: songId
   }).then((result) => {
+    console.log(result);
     return result;
   });
 };

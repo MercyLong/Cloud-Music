@@ -10,12 +10,11 @@
   </div>
 </template>
 <script type="text/javascript">
-import { mapState, mapMutations } from 'vuex';
+import { mapMutations } from 'vuex';
 export default {
   name: 'home-tab-selector',
   data() {
     return {
-      currentIndex: 0,
       tabList: [{
         id: 0,
         text: '推荐音乐',
@@ -55,7 +54,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(['homeTabCurrentIndex'])
+    homeTabCurrentIndex() {
+      return this.$store.getters.getHomeIndex;
+    }
   }
 };
 

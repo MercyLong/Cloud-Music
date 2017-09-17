@@ -52,7 +52,7 @@
 </template>
 <script type="text/javascript">
 import { fetchHotSearch, fetchMultiSearchResults, fetchSongSearchResults } from 'service';
-import { mapMutations, mapState } from 'vuex';
+import { mapMutations } from 'vuex';
 import songLists from 'common/songLists';
 import searchHistory from './searchHistory';
 import { getImageUrl } from 'config/mixin';
@@ -68,7 +68,6 @@ export default {
         this.hotsLists = res.result && res.result.hots;
       }
     },
-
     setSearchKeywords(keyword) {
       this.SET_SEARCH_KEYWORD(keyword);
       // 设置本地存储
@@ -111,7 +110,9 @@ export default {
   },
   mixins: [getImageUrl],
   computed: {
-    ...mapState(['searchKeywords'])
+    searchKeywords() {
+      return this.$store.getters.getKeywords;
+    }
   },
   components: {
     songLists,
@@ -132,8 +133,6 @@ export default {
       this.getResultsByKeyword(this.searchKeywords);
     };
     this.initHotSearch();
-    // 初始化本地存储搜索历史数组
-    // this.initLocalStorageHistory();
   }
 };
 

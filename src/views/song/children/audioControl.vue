@@ -165,7 +165,6 @@ export default {
       this.SET_PLAYING_STATUS(true);
     },
     gotoSong(songId, item) {
-      console.log(item);
       this.$router.replace({
         path: 'song',
         query: {

@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <audio-control ref="audioControlElement" @RESET-LRC="changeLRC"></audio-control>
+    <!-- <audio-control ref="audioControlElement" @RESET-LRC="changeLRC"></audio-control> -->
   </div>
 </template>
 <script type="text/javascript">
@@ -82,7 +82,10 @@ export default {
 
   },
   computed: {
-    ...mapState(['currentSongInfo', 'isPlaying', 'loopStatus', 'currentSongId', 'currentPlayLists', 'audioCurrentTime', 'lrcInfo', 'audioElement', 'offset', 'offsetHeight']),
+    currentSongInfo() {
+      return this.$store.getters.getCurrentSongInfo;
+    },
+    ...mapState(['isPlaying', 'loopStatus', 'currentSongId', 'currentPlayLists', 'audioCurrentTime', 'lrcInfo', 'audioElement', 'offset', 'offsetHeight']),
     songInfo() {
       return this.currentSongInfo;
     },
@@ -95,14 +98,14 @@ export default {
     ...mapMutations(['SET_AUDIO_TIME', 'SET_PLAYING_STATUS', 'SET_CURRENT_SONG_ID', 'SET_AUDIO_URL', 'SET_LRC_INFO', 'SET_AUDIO_ELEMENT', 'SET_LRC_OFFSET', 'SET_LRC_OFFSETHEIGHT']),
     initSongContent() {
       this.initSongDetailInfo();
-      this.initSongLRCInfo();
-      this.initSongAudioUrl();
+      // this.initSongLRCInfo();
+      // this.initSongAudioUrl();
     },
     changeLRC(offset) {
       this.SET_LRC_OFFSETHEIGHT(offset);
     },
-    async initSongDetailInfo() {
-      this.fetchSongDetailByAction(this.songId);
+    initSongDetailInfo() {
+      this.$store.dispatch('fetchSongDetailByAction', this.songId);
     },
 
     async initSongLRCInfo() {
@@ -141,6 +144,7 @@ export default {
   },
   mounted() {
     // 没有在后台运行,初始化
+    console.log(this.songId);
     if ((this.songId) !== this.currentSongInfo.id) {
       this.initSongContent();
       this.SET_PLAYING_STATUS(true);
