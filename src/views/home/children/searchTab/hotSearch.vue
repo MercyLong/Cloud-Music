@@ -52,7 +52,7 @@
 </template>
 <script type="text/javascript">
 import { fetchHotSearch, fetchMultiSearchResults, fetchSongSearchResults } from 'service';
-import { mapMutations } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 import songLists from 'common/songLists';
 import searchHistory from './searchHistory';
 import { getImageUrl } from 'config/mixin';
@@ -110,9 +110,7 @@ export default {
   },
   mixins: [getImageUrl],
   computed: {
-    searchKeywords() {
-      return this.$store.getters.getKeywords;
-    }
+    ...mapGetters(['searchKeywords'])
   },
   components: {
     songLists,

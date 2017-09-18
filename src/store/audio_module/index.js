@@ -1,4 +1,6 @@
 // 音频模块
+import { fetchSongAudioUrl } from 'service';
+import { loopInitData } from 'config/meta';
 export default {
   state: {
     // 当前播放音频的DOM元素
@@ -10,7 +12,29 @@ export default {
     // 当前音频的播放时间
     audioCurrentTime: 0,
     // 音频的循环方式,0默认是列表循环
-    loopStatus: 0
+    loopStatus: 0,
+    loopInitData: loopInitData
+
+  },
+  getters: {
+    audioUrl(state) {
+      return state.audioUrl;
+    },
+    loopStatus(state) {
+      return state.loopStatus;
+    },
+    audioCurrentTime(state) {
+      return state.audioCurrentTime;
+    },
+    audioElement(state) {
+      return state.audioElement;
+    },
+    isPlaying(state) {
+      return state.isPlaying;
+    },
+    loopInitData(state) {
+      return state.loopInitData;
+    }
   },
   mutations: {
     // 设置当前播放时间
@@ -32,6 +56,13 @@ export default {
     // 设置当前播放DOM元素
     SET_AUDIO_ELEMENT(state, domElem) {
       state.audioElement = domElem;
+    }
+  },
+  actions: {
+    async fetchAudioUrlByAction({ commit, state }, songId) {
+      let res = await fetchSongAudioUrl(songId);
+      commit('SET_AUDIO_URL', res.data[0].url);
+      commit('SET_AUDIO_ELEMENT', document.getElementById('song-player-audio'));
     }
   }
 };

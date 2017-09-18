@@ -11,7 +11,7 @@ export default {
   },
   getters: {
     // 获取关键字
-    getKeywords(state) {
+    searchKeywords(state) {
       return state.searchKeywords;
     }
   },

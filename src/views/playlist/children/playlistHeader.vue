@@ -25,12 +25,12 @@
   </div>
 </template>
 <script type="text/javascript">
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import { getImageUrl } from 'config/mixin';
 export default {
   mixins: [getImageUrl],
   computed: {
-    ...mapState(['currentPlayListDetail'])
+    ...mapGetters(['currentPlayListDetail'])
   }
 };
 

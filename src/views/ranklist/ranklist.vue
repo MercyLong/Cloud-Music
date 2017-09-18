@@ -32,20 +32,18 @@
 <script type="text/javascript">
 import headerTop from 'common/header';
 import songPlayLists from 'common/songPlayLists';
-import { mapState, mapMutations, mapActions } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 export default {
   created() {
     this.rid = this.$route.query.id;
   },
   computed: {
-    ...mapState(['currentRankInfo', ''])
+    ...mapGetters(['currentRankInfo'])
   },
   methods: {
-    ...mapActions(['fetchPlayListDetailByAction']),
     ...mapMutations(['SET_CURRENT_PLAY_LIST_DETAIL', 'SET_CURRENT_RANK_LIST_INFO']),
     async initRankList() {
-      var res = await this.fetchPlayListDetailByAction(this.rid);
-      this.SET_CURRENT_RANK_LIST_INFO(res);
+      this.$store.dispatch('fetchRankListDetailByAction', this.rid);
     }
   },
   mounted() {

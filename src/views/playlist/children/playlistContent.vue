@@ -13,20 +13,13 @@
 </template>
 <script type="text/javascript">
 import songPlayLists from 'common/songPlayLists';
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 export default {
   components: {
     songPlayLists
   },
-  data() {
-    return {
-
-    };
-  },
-  methods: {},
-  mounted() {},
   computed: {
-    ...mapState(['currentPlayListDetail'])
+    ...mapGetters(['currentPlayListDetail'])
   }
 };
 

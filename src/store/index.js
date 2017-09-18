@@ -7,6 +7,8 @@ import AudioModule from './audio_module';
 import SongModule from './song_module';
 import PlayListModule from './playList_module';
 import LRCModule from './lrc_module';
+import RankListModule from './rankList_module';
+import MV from './mv_module';
 Vue.use(Vuex);
 export function CreateStore() {
   return new Vuex.Store({
@@ -70,7 +72,9 @@ export function CreateStore() {
       audio: AudioModule,
       song: SongModule,
       playList: PlayListModule,
-      LRC: LRCModule
+      LRC: LRCModule,
+      rankList: RankListModule,
+      mv: MV
     }
   });
 };

@@ -11,14 +11,13 @@ export default {
     }
   },
   getters: {
-    getCurrentSongInfo(state) {
+    currentSongInfo(state) {
       return state.currentSongInfo;
     }
   },
   actions: {
     async fetchSongDetailByAction({ commit, state }, songId) {
       let res = await fetchSongDetail(songId);
-      console.log(res);
       commit('SET_CURRENT_SONG_INFO', res.songs[0]);
     }
   }

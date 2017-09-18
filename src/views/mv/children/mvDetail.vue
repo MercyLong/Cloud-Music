@@ -14,7 +14,7 @@
       </div>
       <div class="play-number">
         <span>播放：</span>
-        <span>1607.9万</span>
+        <span>{{currentVideoInfo.playCount|addMeasurement(4,'万')}}</span>
       </div>
     </div>
     <transition>
@@ -23,17 +23,11 @@
   </section>
 </template>
 <script type="text/javascript">
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 export default {
   computed: {
-    ...mapState(['currentVideoInfo'])
-  },
-  data() {
-    return {
-
-    };
-  },
-  methods: {}
+    ...mapGetters(['currentVideoInfo'])
+  }
 };
 
 </script>

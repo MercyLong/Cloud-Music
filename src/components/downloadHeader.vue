@@ -42,10 +42,10 @@
   </div>
 </template>
 <script type="text/javascript">
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 export default {
   computed: {
-    ...mapState(['isPlaying', 'currentSongInfo'])
+    ...mapGetters(['isPlaying', 'currentSongInfo'])
   },
   methods: {
     gotoCurrentSong() {

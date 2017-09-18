@@ -1,17 +1,17 @@
 <template>
   <div class="global-audio-wrapper">
-    <audio :src="songAudioUrl" @ended="audioPlayEnded" @timeupdate="audioUpdateTime" id="song-player-audio" autoplay="autoplay"></audio>
+    <audio :src="audioUrl" @ended="audioPlayEnded" @timeupdate="audioUpdateTime" id="song-player-audio" autoplay="autoplay"></audio>
   </div>
 </template>
 <script type="text/javascript">
-import { mapState, mapMutations } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 import { _setCurrentSongInLocal } from 'config/util';
 export default {
   data() {
     return {};
   },
   computed: {
-    ...mapState(['currentPlayLists', 'songAudioUrl', 'loopStatus', 'currentSongInfo', 'audioElement'])
+    ...mapGetters(['audioUrl', 'currentPlayLists', 'loopStatus', 'currentSongInfo', 'audioElement'])
   },
   methods: {
     ...mapMutations(['SET_AUDIO_TIME', 'SET_PLAYING_STATUS', 'SET_LRC_OFFSETHEIGHT']),

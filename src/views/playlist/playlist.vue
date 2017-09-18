@@ -8,7 +8,6 @@
 <script type="text/javascript">
 import playlistHeader from './children/playlistHeader';
 import playlistContent from './children/playlistContent';
-import { mapActions, mapMutations } from 'vuex';
 import headerTop from 'common/header';
 export default {
   data() {
@@ -17,10 +16,8 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['fetchPlayListDetailByAction']),
-    ...mapMutations(['SET_CURRENT_PLAY_LIST_DETAIL']),
     async initPlayListDetail() {
-      this.fetchPlayListDetailByAction(this.playListId);
+      this.$store.dispatch('fetchPlayListDetailByAction', this.playListId);
     }
   },
   mounted() {

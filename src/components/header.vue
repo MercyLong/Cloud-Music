@@ -11,11 +11,11 @@
   </div>
 </template>
 <script type="text/javascript">
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 export default {
   props: ['title', 'hasPlayingStatus', 'isFixed'],
   computed: {
-    ...mapState(['isPlaying', 'currentSongInfo'])
+    ...mapGetters(['isPlaying', 'currentSongInfo'])
   },
   methods: {
     gotoCurrentSong() {

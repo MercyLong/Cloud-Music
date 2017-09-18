@@ -30,14 +30,13 @@
         </div>
       </div>
     </div>
-    <!-- <audio-control ref="audioControlElement" @RESET-LRC="changeLRC"></audio-control> -->
+    <audio-control ref="audioControlElement" @RESET-LRC="changeLRC"></audio-control>
   </div>
 </template>
 <script type="text/javascript">
-import { fetchSongLRC, fetchSongAudioUrl } from 'service';
 import audioControl from './children/audioControl';
 import headerTop from 'common/header';
-import { mapActions, mapState, mapMutations } from 'vuex';
+import { mapMutations, mapGetters } from 'vuex';
 export default {
   created() {
     if (!this.songId) {
@@ -82,10 +81,7 @@ export default {
 
   },
   computed: {
-    currentSongInfo() {
-      return this.$store.getters.getCurrentSongInfo;
-    },
-    ...mapState(['isPlaying', 'loopStatus', 'currentSongId', 'currentPlayLists', 'audioCurrentTime', 'lrcInfo', 'audioElement', 'offset', 'offsetHeight']),
+    ...mapGetters(['lrcInfo', 'currentSongInfo', 'isPlaying', 'loopStatus', 'currentSongId', 'currentPlayLists', 'audioCurrentTime', 'audioElement', 'offset', 'offsetHeight']),
     songInfo() {
       return this.currentSongInfo;
     },
@@ -94,12 +90,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchSongDetailByAction']),
+
     ...mapMutations(['SET_AUDIO_TIME', 'SET_PLAYING_STATUS', 'SET_CURRENT_SONG_ID', 'SET_AUDIO_URL', 'SET_LRC_INFO', 'SET_AUDIO_ELEMENT', 'SET_LRC_OFFSET', 'SET_LRC_OFFSETHEIGHT']),
     initSongContent() {
       this.initSongDetailInfo();
-      // this.initSongLRCInfo();
-      // this.initSongAudioUrl();
+      this.initSongLRCInfo();
+      this.initSongAudioUrl();
     },
     changeLRC(offset) {
       this.SET_LRC_OFFSETHEIGHT(offset);
@@ -107,9 +103,7 @@ export default {
     initSongDetailInfo() {
       this.$store.dispatch('fetchSongDetailByAction', this.songId);
     },
-
-    async initSongLRCInfo() {
-      var res = await fetchSongLRC(this.songId);
+    ProcessLRC(res) {
       if (res.lrc && res.lrc.lyric) {
         // 正则匹配 空格替换成换行符。前面的时间全部替换掉
         var infoArray = res.lrc.lyric.split('\n');
@@ -132,25 +126,22 @@ export default {
         this.SET_LRC_INFO([]);
       }
     },
+    async initSongLRCInfo() {
+      let res = await this.$store.dispatch('fetchSongLRCByAction', this.songId);
+      this.ProcessLRC(res);
+    },
     async initSongAudioUrl() {
-      var res = await fetchSongAudioUrl(this.songId);
-      if (res.code === 200 && res.data[0].url) {
-        this.SET_AUDIO_URL(res.data[0].url);
-        this.SET_AUDIO_ELEMENT(document.getElementById('song-player-audio'));
-      } else {
-        // 当没有URL的时候的处理方式
-      }
+      this.$store.dispatch('fetchAudioUrlByAction', this.songId);
     }
   },
   mounted() {
     // 没有在后台运行,初始化
-    console.log(this.songId);
     if ((this.songId) !== this.currentSongInfo.id) {
       this.initSongContent();
       this.SET_PLAYING_STATUS(true);
       this.SET_LRC_OFFSETHEIGHT(0);
     } else {
-      this.$refs['audioControlElement'].resetLRC(this.audioCurrentTime);
+      this.SET_AUDIO_TIME(this.audioCurrentTime);
     }
   }
 };

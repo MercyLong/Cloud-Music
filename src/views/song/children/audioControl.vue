@@ -46,7 +46,7 @@
   </div>
 </template>
 <script type="text/javascript">
-import { mapState, mapMutations } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 import { _removeLocalHistoryForCurrent, _setCurrentSongInLocal, _setLocalHistoryForCurrent } from 'config/util';
 export default {
   created() {
@@ -58,7 +58,7 @@ export default {
 
   },
   methods: {
-    ...mapMutations(['SET_PLAYING_STATUS', 'CHANGE_LOOP_STATUS', 'SET_CURRENT_PLAY_LIST', 'SET_AUDIO_TIME', 'SET_CURRENT_SONG_INFO']),
+    ...mapMutations(['SET_PLAYING_STATUS', 'CHANGE_LOOP_STATUS', 'SET_CURRENT_PLAY_LIST', 'SET_AUDIO_TIME', 'SET_CURRENT_SONG_INFO', 'SET_LRC_OFFSET']),
     processDataStucture(list) {
       return list.map((item, idx) => {
         item.artists = item.ar;
@@ -90,12 +90,14 @@ export default {
     },
     resetLRC(currentTime, offset) {
       let offsetHeight = 0;
+      let elemLRC = document.querySelectorAll('.inner');
+      this.SET_AUDIO_TIME(currentTime);
       this.lrcInfo.forEach((item, idx) => {
         if ((item.timeStamp <= currentTime) && (idx - 2 > 0)) {
-          let elemLRC = document.querySelectorAll('.inner');
           offsetHeight += elemLRC[idx - 3].offsetHeight;
         }
       });
+      // currentHeight = elemLRC[$index - 2].offsetHeight;
       this.$emit('RESET-LRC', offsetHeight);
     },
     filterPlayList(songId) {
@@ -182,7 +184,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['currentSongInfo', 'audioCurrentTime', 'isPlaying', 'loopInitData', 'loopStatus', 'currentPlayLists', 'lrcInfo', 'audioElement', 'currentPlayListDetail', 'playListType']),
+    ...mapGetters(['currentSongInfo', 'audioCurrentTime', 'isPlaying', 'loopInitData', 'loopStatus', 'currentPlayLists', 'lrcInfo', 'audioElement', 'currentPlayListDetail', 'playListType']),
     readyWidth() {
       var currentTime = parseInt(this.audioCurrentTime);
       var totalTime = parseInt(this.currentSongInfo.dt / 1000);

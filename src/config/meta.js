@@ -79,3 +79,20 @@ export const rankingList = [{
     'id': '1899724'
   }
 ];
+
+export const loopInitData = [{
+    id: 0,
+    text: '列表循环',
+    icon: '&#xe6f2;'
+  },
+  {
+    id: 1,
+    text: '单曲循环',
+    icon: '&#xe602;'
+  },
+  {
+    id: 2,
+    text: '随机循环',
+    icon: '&#xe62a;'
+  }
+];

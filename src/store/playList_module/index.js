@@ -1,3 +1,4 @@
+import { fetchPlayListDetail } from 'service';
 export default {
   state: {
     // 当前播放歌单详情
@@ -6,6 +7,23 @@ export default {
     currentPlayLists: [],
     // 当前播放列表类型 true.歌单类型 false.历史信息（本地信息）
     playListType: false
+  },
+  getters: {
+    currentPlayListDetail(state) {
+      return state.currentPlayListDetail;
+    },
+    currentPlayLists(state) {
+      return state.currentPlayLists;
+    },
+    playListType(state) {
+      return state.playListType;
+    }
+  },
+  actions: {
+    async fetchPlayListDetailByAction({ commit, state }, id) {
+      let res = await fetchPlayListDetail(id);
+      commit('SET_CURRENT_PLAY_LIST_DETAIL', res.playlist);
+    }
   },
   mutations: {
     SET_CURRENT_PLAY_LIST_DETAIL(state, detailInfo) {

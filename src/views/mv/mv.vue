@@ -1,5 +1,6 @@
 <template>
   <div class="video-player-wrapper">
+    <header-top></header-top>
     <div class="video-box">
       <div class="video-bg absolute-full">
         <video controls="" :src="currentVideoInfo.brs&&currentVideoInfo.brs['240']|addPrefix" class="video-player" :poster="currentVideoInfo.cover" id="video-player">
@@ -15,7 +16,8 @@
   </div>
 </template>
 <script type="text/javascript">
-import { mapActions, mapState, mapMutations } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
+import headerTop from 'common/header';
 import mvDetail from './children/mvDetail';
 import mvComments from './children/mvComments';
 import mvRecommends from './children/mvRecommends';
@@ -24,7 +26,6 @@ export default {
   data() {
     return {
       videoId: this.$route.query.id,
-      offset: 0,
       isShowPlayIcon: true,
       mvComments: {},
       mvRecommends: []
@@ -33,7 +34,8 @@ export default {
   components: {
     mvDetail,
     mvComments,
-    mvRecommends
+    mvRecommends,
+    headerTop
   },
   watch: {
     $route(newVal, oldVal) {
@@ -49,7 +51,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['currentVideoInfo', 'audioElement'])
+    ...mapGetters(['currentVideoInfo', 'audioElement'])
   },
   filters: {
     addPrefix(url) {
@@ -59,16 +61,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchVideoDetailByAction']),
     ...mapMutations(['SET_PLAYING_STATUS']),
     async initVideoDetail() {
-      this.fetchVideoDetailByAction(this.videoId);
+      this.$store.dispatch('fetchVideoDetailByAction', this.videoId);
     },
     controlControlBar(boolean) {
       document.getElementById('video-player').controls = boolean;
-    },
-    async loadMoreCommon(res) {
-
     },
     playingVideo() {
       this.controlControlBar(true);
@@ -85,14 +83,12 @@ export default {
     },
     initMvTemplate() {
       this.initVideoDetail();
-      // this.initMvComments();
       this.initMvRecommends();
       this.controlControlBar(false);
     }
   },
   mounted() {
     this.initMvTemplate();
-    // 改变滚动栏的位置
   }
 };
 
