@@ -22,6 +22,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .home-wrapper {
+  min-height: 100%;
   .router-fade-enter-active,
   .router-fade-leave-active {
     transition: opacity .3s;

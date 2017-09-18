@@ -1,6 +1,6 @@
 <template>
   <div class="topic-wrapper">
-    <header-top></header-top>
+    <header-top :title="'专栏'"></header-top>
     <iframe frameborder="0" :src="src.url"></iframe>
   </div>
 </template>

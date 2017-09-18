@@ -25,7 +25,9 @@ export default {
   methods: {
     async initBannerList() {
       var res = await fetchBannerList();
-      this.bannerList = res.banners;
+      this.bannerList = res.banners.filter((item) => {
+        return item.url !== '';
+      });
     },
     gotoTopic(banner) {
       // 设置本地缓存

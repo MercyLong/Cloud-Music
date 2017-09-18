@@ -55,6 +55,14 @@ export default {
     margin-bottom: 16px;
     .recommend-item-img {
       position: relative;
+      padding-bottom: 100%;
+      img {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+      }
       &.mask {
         &:after {
           content: " ";
@@ -64,7 +72,7 @@ export default {
           width: 100%;
           height: 20px;
           z-index: 2;
-          background-image: linear-gradient(180deg, rgba(0, 0, 0, .5), transparent);
+          background-image: linear-gradient(180deg, rgba(0, 0, 0, .3), transparent);
         }
       }
 
