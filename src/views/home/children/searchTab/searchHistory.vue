@@ -14,11 +14,14 @@
   </section>
 </template>
 <script type="text/javascript">
-import { mapMutations } from 'vuex';
+import { mapMutations, mapGetters } from 'vuex';
 import { _setLocalSearchHistory, _removeLocalSearchHistory } from 'config/util';
 export default {
   mounted() {
     this.initSearchHistory();
+  },
+  computed: {
+    ...mapGetters(['searchKeywords'])
   },
   data() {
     return {
@@ -34,6 +37,9 @@ export default {
       }
     },
     setSearchKeyword(keyword) {
+      if (this.searchKeywords) {
+        this.SET_SEARCH_KEYWORD(null);
+      };
       this.SET_SEARCH_KEYWORD(keyword);
       _setLocalSearchHistory('searchHistory', keyword);
     },

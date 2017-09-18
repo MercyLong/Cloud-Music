@@ -3,7 +3,7 @@
     <div class="search-bar-wrapper border-bt">
       <div class="search-bar">
         <i class="search-icon iconfont">&#xe66f;</i>
-        <input v-model="keyword" class="search-bar-input" type="text" name="search-bar" :placeholder="keyword?'':'搜索歌曲、歌手、专辑'">
+        <input @input="changeSearchKeywords" v-model="keyword" class="search-bar-input" type="text" name="search-bar" :placeholder="keyword?'':'搜索歌曲、歌手、专辑'">
         <i @click="clearSearchKeywords" v-if="searchKeywords" class="search-clear iconfont">&#xe833;</i>
       </div>
     </div>
@@ -18,6 +18,10 @@ export default {
     ...mapMutations(['SET_SEARCH_KEYWORD']),
     clearSearchKeywords() {
       this.SET_SEARCH_KEYWORD(null);
+    },
+    changeSearchKeywords(ev) {
+      let keyword = ev.target.value;
+      this.SET_SEARCH_KEYWORD(keyword);
     }
   },
   computed: {
@@ -27,7 +31,7 @@ export default {
         return this.searchKeywords;
       },
       set(newValue) {
-        this.SET_SEARCH_KEYWORD(newValue);
+
       }
     }
   },

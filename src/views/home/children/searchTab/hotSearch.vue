@@ -95,7 +95,7 @@ export default {
         this.searchMv = res.result.mv;
       };
       var resSong = await fetchSongSearchResults(keyword);
-      if (resSong.code === 200) {
+      if (resSong.code === 200 && resSong.result.songs) {
         // 处理数据结构，外面包一层，以便复用组件
         this.songSearchResults = this.dataProcess(resSong.result.songs);
       };
