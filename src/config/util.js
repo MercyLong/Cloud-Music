@@ -47,3 +47,9 @@ export function _removeLocalSearchHistory(key, keyword) {
   localStorage.setItem(key, JSON.stringify(songListsHistory));
   return songListsHistory;
 };
+export function setLocal(key, val) {
+  localStorage.setItem(key, JSON.stringify(val));
+};
+export function getLocal(key) {
+  return JSON.parse(localStorage.getItem(key));
+};

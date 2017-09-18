@@ -2,7 +2,7 @@
   <div class="recommend-list">
     <div @click="gotoPlayListDetail(item)" :key="item.id" :to="{path:'playlist',query:{id:item.id}}" class="recommend-item" v-for="item in recommendList">
       <div :class="item.playCount?'mask':''" class="recommend-item-img">
-        <img @load="needReload?completeLoad(item):()=>{}" :src="`${item.picTinyUrl}`">
+        <img @load="needReload?completeLoad(item):()=>{}" :src="`${item.picUrl}`">
         <span v-if="item.playCount" class="recommend-like-num">
             <i class="iconfont">&#xe600;</i>
             {{item.playCount| addMeasurement(4,'万')}}</span>
@@ -14,9 +14,13 @@
 <script type="text/javascript">
 import { replaceImageUrl } from 'config/mixin';
 // 歌单跳转的时候进行本地缓存。再下一个落地页提取
+import { setLocal } from 'config/util';
 export default {
   mixins: {
     replaceImageUrl
+  },
+  mounted() {
+    console.log(this.recommendList);
   },
   props: ['recommendList', 'needReload'],
   methods: {
@@ -25,6 +29,7 @@ export default {
     },
     gotoPlayListDetail(item) {
       // 1.设置本地缓存,基本信息不需要http
+      setLocal('currentPlayListBaseInfo', item);
       // 2.跳转到歌单详情页
       this.$router.push({
         path: 'playlist',

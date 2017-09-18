@@ -72,6 +72,7 @@ export default {
         flex: 1;
         display: flex;
         align-items: center;
+        transform: translate3d(0, 0, 0);
         width: 0;
         height: 55px;
         box-sizing: border-box;

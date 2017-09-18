@@ -1,17 +1,17 @@
 <template>
   <div class="playlist-header-wrapper">
-    <div :style="{backgroundImage:`url(${currentPlayListDetail.coverImgUrl})`}" class="bg-wrapper absolute-full">
+    <div :style="{backgroundImage:`url(${currentBaseInfo.picUrl})`}" class="bg-wrapper absolute-full">
     </div>
     <div class="playlist-header">
       <div class="img-wrapper">
-        <img :src="getImageUrl(currentPlayListDetail.coverImgUrl,252,'webp')">
+        <img :src="getImageUrl(currentBaseInfo.picUrl,252,'webp')">
         <span v-if="currentPlayListDetail.playCount" class="play-number">
         <i class="iconfont">&#xe600;</i>
         {{currentPlayListDetail.playCount| addMeasurement(4,'万')}}
         </span>
       </div>
       <div class="conent-wrapper">
-        <div class="content-name">{{currentPlayListDetail.name}}
+        <div class="content-name">{{currentBaseInfo.name}}
         </div>
         <div class="content-artist">
           <span class="artist-url">
@@ -25,9 +25,13 @@
   </div>
 </template>
 <script type="text/javascript">
+import { getLocal } from 'config/util';
 import { mapGetters } from 'vuex';
 import { getImageUrl } from 'config/mixin';
 export default {
+  created() {
+    this.currentBaseInfo = getLocal('currentPlayListBaseInfo');
+  },
   mixins: [getImageUrl],
   computed: {
     ...mapGetters(['currentPlayListDetail'])

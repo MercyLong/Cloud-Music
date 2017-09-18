@@ -61,7 +61,9 @@ export const getImageUrl = {
     getImageUrl(path, size = 40, type = 'jpg') {
       if (!path) {
         return false;
-      };
+      } else if (/^\/static\/images/.test(path)) {
+        return path;
+      }
       let { imageUrl, imageType } = changeImageType(path, type);
       let prefix = `?imageView&thumbnail=${size}x0&quality=75&tostatic=0&type=${imageType}`;
       return `${imageUrl}${prefix}`;
