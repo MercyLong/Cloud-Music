@@ -7,6 +7,7 @@ import RankingTab from '@/views/home/children/rankingTab';
 import SearchTab from '@/views/home/children/searchTab';
 import Mv from '@/views/mv/mv';
 import PlayList from '@/views/playlist/playlist';
+import Album from '@/views/album/album';
 import RankList from '@/views/ranklist/ranklist';
 import Topic from '@/views/topic/topic';
 Vue.use(Router);
@@ -50,6 +51,10 @@ export default new Router({
     path: '/topic',
     name: 'Topic',
     component: Topic
+  }, {
+    path: '/album',
+    name: 'Album',
+    component: Album
   }],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

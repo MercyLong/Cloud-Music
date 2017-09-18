@@ -66,7 +66,6 @@ var fetchSongDetail = (songId) => {
   return fetch('GET', api.getSongDetail, {
     ids: songId
   }).then((result) => {
-    console.log(result);
     return result;
   });
 };
@@ -140,6 +139,16 @@ var fetchBannerList = () => {
     return result;
   });
 };
+/*
+ **@ 获取专辑信息
+ */
+var fetchAlbumDetail = (id) => {
+  return fetch('GET', api.getAlbumDetail, {
+    id: id
+  }).then((result) => {
+    return result;
+  });
+};
 export {
   fetchRecommendList,
   fetchNewSongList,
@@ -154,5 +163,6 @@ export {
   fetchMvComments,
   fetchMvRecommends,
   fetchPlayListDetail,
-  fetchBannerList
+  fetchBannerList,
+  fetchAlbumDetail
 };

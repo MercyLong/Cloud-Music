@@ -14,7 +14,7 @@
       <section class="search-album-wrapper">
         <h3 class="search-result-title">最佳匹配</h3>
         <ul v-if="searchAlbum && searchAlbum.length > 0" class="search-result-album-list border-bt">
-          <li v-for="album in searchAlbum">
+          <li @click="gotoAlbum(album)" v-for="album in searchAlbum">
             <div class="pic-url cover-url">
               <img :src="getImageUrl(album.picUrl,100)">
             </div>
@@ -57,7 +57,7 @@ import songLists from 'common/songLists';
 import searchHistory from './searchHistory';
 import { getImageUrl } from 'config/mixin';
 import mvLists from 'common/mvLists';
-import { _setLocalSearchHistory } from 'config/util';
+import { _setLocalSearchHistory, setLocal } from 'config/util';
 export default {
   methods: {
     ...mapMutations(['SET_SEARCH_KEYWORD']),
@@ -76,6 +76,16 @@ export default {
     },
     setLocalHistory(keyword) {
       localStorage.searchHistory.push(keyword);
+    },
+    gotoAlbum(album) {
+      // 设置本地缓存
+      setLocal('currentAlbum', album);
+      this.$router.push({
+        path: '/album',
+        query: {
+          id: album.id
+        }
+      });
     },
     async getResultsByKeyword(keyword) {
       var res = await fetchMultiSearchResults(keyword);

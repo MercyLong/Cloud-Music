@@ -14,6 +14,7 @@ let getMvRecommend;
 let getMvComments;
 let getPlayListDetail;
 let getBannerList;
+let getAlbumDetail;
 /* global __DEV__ */
 if (__DEV__) {
   baseUrl = 'api';
@@ -35,6 +36,7 @@ getMvRecommend = `${baseUrl}/simi/mv`;
 getMvComments = `${baseUrl}/comment/mv`;
 getPlayListDetail = `${baseUrl}/playlist/detail`;
 getBannerList = `${baseUrl}/banner`;
+getAlbumDetail = `${baseUrl}/album`;
 export {
   getRecommendList,
   getNewSongs,
@@ -49,5 +51,6 @@ export {
   getMvRecommend,
   getMvComments,
   getPlayListDetail,
-  getBannerList
+  getBannerList,
+  getAlbumDetail
 };

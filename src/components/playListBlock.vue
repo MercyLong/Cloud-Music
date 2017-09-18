@@ -19,9 +19,6 @@ export default {
   mixins: {
     replaceImageUrl
   },
-  mounted() {
-    console.log(this.recommendList);
-  },
   props: ['recommendList', 'needReload'],
   methods: {
     completeLoad(item) {
