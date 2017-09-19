@@ -58,7 +58,7 @@ export default {
 
   },
   methods: {
-    ...mapMutations(['SET_PLAYING_STATUS', 'CHANGE_LOOP_STATUS', 'SET_CURRENT_PLAY_LIST', 'SET_AUDIO_TIME', 'SET_CURRENT_SONG_INFO', 'SET_LRC_OFFSET']),
+    ...mapMutations(['SET_PLAYING_STATUS', 'CHANGE_LOOP_STATUS', 'SET_CURRENT_PLAY_LIST', 'SET_AUDIO_TIME', 'SET_CURRENT_SONG_INFO', 'SET_LRC_OFFSET', 'SET_LRC_OFFSETHEIGHT']),
     processDataStucture(list) {
       return list.map((item, idx) => {
         item.artists = item.ar;
@@ -86,7 +86,7 @@ export default {
       let currentTime = parseInt(duration * percent);
       this.SET_AUDIO_TIME(currentTime);
       this.audioElement.currentTime = currentTime;
-      this.resetLRC(currentTime, 2);
+      this.resetLRC(currentTime);
     },
     resetLRC(currentTime, offset) {
       let offsetHeight = 0;
@@ -97,8 +97,7 @@ export default {
           offsetHeight += elemLRC[idx - 3].offsetHeight;
         }
       });
-      // currentHeight = elemLRC[$index - 2].offsetHeight;
-      this.$emit('RESET-LRC', offsetHeight);
+      this.SET_LRC_OFFSETHEIGHT(offsetHeight);
     },
     filterPlayList(songId) {
       return this.currentPlayLists.filter((item) => {

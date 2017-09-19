@@ -61,6 +61,8 @@ export default {
     color: #fff;
   }
   .playing-status {
+    flex: 1;
+    text-align: right;
     margin-right: 15px;
     height: 19px;
     &.isPlaying {
@@ -119,7 +121,6 @@ export default {
     color: rgba(255, 255, 255, 0.7);
     margin-left: 10px;
     font-size: 24px;
-    flex: 1;
   }
   .share {
     font-size: 24px;

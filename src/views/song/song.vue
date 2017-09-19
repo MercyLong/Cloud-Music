@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <audio-control ref="audioControlElement" @RESET-LRC="changeLRC"></audio-control>
+    <audio-control ref="audioControlElement"></audio-control>
   </div>
 </template>
 <script type="text/javascript">
@@ -97,9 +97,6 @@ export default {
       this.initSongLRCInfo();
       this.initSongAudioUrl();
     },
-    changeLRC(offset) {
-      this.SET_LRC_OFFSETHEIGHT(offset);
-    },
     initSongDetailInfo() {
       this.$store.dispatch('fetchSongDetailByAction', this.songId);
     },
@@ -141,6 +138,7 @@ export default {
       this.SET_PLAYING_STATUS(true);
       this.SET_LRC_OFFSETHEIGHT(0);
     } else {
+      this.$refs['audioControlElement'].resetLRC(this.audioCurrentTime, this.offset);
       this.SET_AUDIO_TIME(this.audioCurrentTime);
     }
   }

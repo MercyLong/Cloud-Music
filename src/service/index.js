@@ -149,6 +149,14 @@ var fetchAlbumDetail = (id) => {
     return result;
   });
 };
+
+var fetchArtistDetail = (id) => {
+  return fetch('GET', api.getArtistDetail, {
+    id: id
+  }).then((result) => {
+    return result;
+  });
+};
 export {
   fetchRecommendList,
   fetchNewSongList,
@@ -164,5 +172,6 @@ export {
   fetchMvRecommends,
   fetchPlayListDetail,
   fetchBannerList,
-  fetchAlbumDetail
+  fetchAlbumDetail,
+  fetchArtistDetail
 };

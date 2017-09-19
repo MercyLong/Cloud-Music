@@ -28,6 +28,11 @@ $ npm run dev
 
 ## 更新日志
 
+### 1.0.1 | 2017.9.19
+重构了第一期功能代码,Vuex模块化管理整个应用的Store,完成部分专辑页面和
+歌手页面的功能迭代
+
+
 ### 1.0.0 | 2017.9.14
 发布网易云音乐第一版,完成基本听歌功能,支持历史播放和歌单播放.
 
@@ -47,7 +52,7 @@ $ npm run dev
 
 - 首页（独家放送） ——  <font color="red">未完成</font>
 
-- 首页（排行榜） ——  <font color="red">未完成</font>
+- 首页（排行榜） ——  <font color="red">完成</font>
 
 - 首页（歌单） —— <font color="red">未完成</font>
 
@@ -55,7 +60,7 @@ $ npm run dev
 
 - 首页（主播电台） —— <font color="red">未完成</font>
 
-- 视频详情页 —— <font color="red">未完成</font>
+- 视频详情页 —— <font color="red">完成</font>
 
 - 评论详情页 —— <font color="red">未完成</font>
 

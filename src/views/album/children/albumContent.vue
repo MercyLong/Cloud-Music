@@ -1,6 +1,6 @@
 <template>
   <div class="album-content-wrapper">
-    <song-play-lists :song-play-lists="currentAlbumInfo.songs">
+    <song-play-lists :total="currentAlbumInfo.album && currentAlbumInfo.album.size" :song-play-lists="currentAlbumInfo.songs">
     </song-play-lists>
   </div>
 </template>

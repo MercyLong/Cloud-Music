@@ -14,7 +14,7 @@
         <div class="content-name">{{currentBaseInfo.name}}
           <span>({{currentBaseInfo.alias[0]}})</span>
         </div>
-        <div class="content-artist">
+        <div @click="gotoArtists(currentBaseInfo.artist.id)" class="content-artist">
           <span class="text">歌手：</span>
           <span class="artist-name">{{currentBaseInfo.artist.name}}</span>
           <i class="iconfont">&#xe604;</i>
@@ -39,6 +39,16 @@ export default {
     return {
       currentBaseInfo: {}
     };
+  },
+  methods: {
+    gotoArtists(artistId) {
+      this.$router.push({
+        path: 'artists',
+        query: {
+          id: artistId
+        }
+      });
+    }
   },
   mixins: [getImageUrl],
   computed: {

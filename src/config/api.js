@@ -15,6 +15,7 @@ let getMvComments;
 let getPlayListDetail;
 let getBannerList;
 let getAlbumDetail;
+let getArtistDetail;
 /* global __DEV__ */
 if (__DEV__) {
   baseUrl = 'api';
@@ -37,6 +38,7 @@ getMvComments = `${baseUrl}/comment/mv`;
 getPlayListDetail = `${baseUrl}/playlist/detail`;
 getBannerList = `${baseUrl}/banner`;
 getAlbumDetail = `${baseUrl}/album`;
+getArtistDetail = `${baseUrl}/artists`;
 export {
   getRecommendList,
   getNewSongs,
@@ -52,5 +54,6 @@ export {
   getMvComments,
   getPlayListDetail,
   getBannerList,
-  getAlbumDetail
+  getAlbumDetail,
+  getArtistDetail
 };

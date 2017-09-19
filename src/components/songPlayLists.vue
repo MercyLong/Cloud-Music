@@ -1,5 +1,12 @@
 <template>
   <div class="song-play-lists-wrapper">
+    <div v-if="total" class="playing-total">
+      <i class="iconfont">&#xe60d;</i>
+      <div class="playlist-total-content border-bt">播放全部
+        <span>（{{total}}）
+        </span>
+      </div>
+    </div>
     <ul class="song-play-lists">
       <li v-for="(item,$index) in songPlayLists" class="song-play-item">
         <div class="item-ranking">{{$index + 1}}</div>
@@ -25,10 +32,7 @@
 import { mapMutations } from 'vuex';
 import { _setLocalHistoryForCurrent, _setCurrentSongInLocal } from 'config/util';
 export default {
-  props: ['songPlayLists'],
-  mounted() {
-
-  },
+  props: ['songPlayLists', 'total'],
   methods: {
     ...mapMutations(['SET_PLAY_LIST_TYPE', 'SET_CURRENT_PLAY_LIST']),
     gotoMv(mvId) {
@@ -57,6 +61,24 @@ export default {
 </script>
 <style lang="less" scoped>
 .song-play-lists-wrapper {
+  .playing-total {
+    display: flex;
+    align-items: center;
+    .playlist-total-content {
+      flex: 1;
+      line-height: 58px;
+      height: 55px;
+      box-sizing: border-box;
+      span {
+        margin-left: -11px;
+      }
+    }
+    .iconfont {
+      width: 40px;
+      text-align: center;
+      font-size: 22px;
+    }
+  }
   .song-play-lists {
     .song-play-item {
       display: flex;

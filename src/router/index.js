@@ -10,6 +10,7 @@ import PlayList from '@/views/playlist/playlist';
 import Album from '@/views/album/album';
 import RankList from '@/views/ranklist/ranklist';
 import Topic from '@/views/topic/topic';
+import Artists from '@/views/artists/artists';
 Vue.use(Router);
 export default new Router({
   mode: 'history',
@@ -55,6 +56,10 @@ export default new Router({
     path: '/album',
     name: 'Album',
     component: Album
+  }, {
+    path: '/artists',
+    name: 'Artists',
+    component: Artists
   }],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
