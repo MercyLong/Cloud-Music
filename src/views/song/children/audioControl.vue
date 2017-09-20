@@ -133,7 +133,6 @@ export default {
       let idx;
       let len = this.currentPlayLists.length;
       if (len === 1) {
-        // let elem = document.getElementById('song-player-audio');
         this.audioElement.play();
         this.SET_PLAYING_STATUS(true);
         return;

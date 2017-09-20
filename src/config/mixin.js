@@ -3,7 +3,7 @@ export const loadMore = {
     'load-more': {
       bind: (el, binding) => {
         const windowHeight = window.screen.height;
-        const scrollReducer = 150;
+        const scrollReducer = 10;
         let offset;
         let scrollTop;
         let height;
@@ -12,6 +12,7 @@ export const loadMore = {
           offset = el.offsetTop;
           scrollTop = document.body.scrollTop;
           height = el.clientHeight;
+          console.log(windowHeight, scrollTop, offset, height);
           isTriggerEvent = (windowHeight + scrollTop >= offset + height + scrollReducer);
           touchMove();
         }, false);
@@ -22,7 +23,7 @@ export const loadMore = {
           if (isTriggerEvent) {
             binding.value['start']();
           } else {
-            return false;
+            binding.value['cancel']();
           }
         };
         const touchEnd = () => {
@@ -31,6 +32,14 @@ export const loadMore = {
           }
         };
       }
+    }
+  },
+  methods: {
+    loadStart() {
+      this.loadText = '松开刷新';
+    },
+    loadCancel() {
+      this.loadText = '上拉加载';
     }
   }
 };

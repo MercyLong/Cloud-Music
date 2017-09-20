@@ -150,10 +150,22 @@ var fetchAlbumDetail = (id) => {
   });
 };
 
+/*
+ **@ 获取歌手热门信息
+ */
 var fetchArtistDetail = (id) => {
   return fetch('GET', api.getArtistDetail, {
     id: id
   }).then((result) => {
+    return result;
+  });
+};
+
+/*
+ **@ 获取歌手专辑信息
+ */
+var fetchArtistAlbum = (options) => {
+  return fetch('GET', api.getArtistAlbum, options).then((result) => {
     return result;
   });
 };
@@ -173,5 +185,6 @@ export {
   fetchPlayListDetail,
   fetchBannerList,
   fetchAlbumDetail,
-  fetchArtistDetail
+  fetchArtistDetail,
+  fetchArtistAlbum
 };

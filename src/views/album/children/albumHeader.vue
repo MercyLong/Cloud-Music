@@ -12,7 +12,7 @@
       </div>
       <div class="conent-wrapper">
         <div class="content-name">{{currentBaseInfo.name}}
-          <span>({{currentBaseInfo.alias[0]}})</span>
+          <span v-if="currentBaseInfo.alias.length">({{currentBaseInfo.alias[0]}})</span>
         </div>
         <div @click="gotoArtists(currentBaseInfo.artist.id)" class="content-artist">
           <span class="text">歌手：</span>

@@ -1,16 +1,19 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from '@/views/home/home';
-import Song from '@/views/song/song';
-import RecommendTab from '@/views/home/children/recommendTab';
-import RankingTab from '@/views/home/children/rankingTab';
-import SearchTab from '@/views/home/children/searchTab';
-import Mv from '@/views/mv/mv';
-import PlayList from '@/views/playlist/playlist';
-import Album from '@/views/album/album';
-import RankList from '@/views/ranklist/ranklist';
-import Topic from '@/views/topic/topic';
-import Artists from '@/views/artists/artists';
+
+const Home = r => require.ensure([], () => r(require('@/views/home/home')), 'home');
+const Song = r => require.ensure([], () => r(require('@/views/song/song')), 'song');
+const RecommendTab = r => require.ensure([], () => r(require('@/views/home/children/recommendTab')), 'recommendTab');
+const RankingTab = r => require.ensure([], () => r(require('@/views/home/children/rankingTab')), 'rankingTab');
+const SearchTab = r => require.ensure([], () => r(require('@/views/home/children/searchTab')), 'searchTab');
+const Mv = r => require.ensure([], () => r(require('@/views/mv/mv')), 'mv');
+const PlayList = r => require.ensure([], () => r(require('@/views/playlist/playlist')), 'playlist');
+const Album = r => require.ensure([], () => r(require('@/views/album/album')), 'album');
+const RankList = r => require.ensure([], () => r(require('@/views/ranklist/ranklist')), 'ranklist');
+const Topic = r => require.ensure([], () => r(require('@/views/topic/topic')), 'topic');
+const Artists = r => require.ensure([], () => r(require('@/views/artists/artists')), 'artists');
+const ArtistsAlbum = r => require.ensure([], () => r(require('@/views/artists/children/artistsAlbum')), 'artistsAlbum');
+const ArtistsHot = r => require.ensure([], () => r(require('@/views/artists/children/ArtistsHot')), 'ArtistsHot');
 Vue.use(Router);
 export default new Router({
   mode: 'history',
@@ -59,7 +62,17 @@ export default new Router({
   }, {
     path: '/artists',
     name: 'Artists',
-    component: Artists
+    component: Artists,
+    redirect: { name: 'ArtistsHot' },
+    children: [{
+      path: 'hot',
+      name: 'ArtistsHot',
+      component: ArtistsHot
+    }, {
+      path: 'album',
+      name: 'ArtistsAlbum',
+      component: ArtistsAlbum
+    }]
   }],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

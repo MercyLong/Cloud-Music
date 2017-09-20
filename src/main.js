@@ -8,6 +8,12 @@ import VueAwesomeSwiper from 'vue-awesome-swiper';
 import {
   CreateStore
 } from './store';
+import FastClick from 'fastclick';
+if ('addEventListener' in document) {
+  document.addEventListener('DOMContentLoaded', function() {
+    FastClick.attach(document.body);
+  }, false);
+};
 Vue.config.productionTip = false;
 Object.keys(filters).forEach((key) => {
   Vue.filter(key, filters[key]);

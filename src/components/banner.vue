@@ -45,7 +45,7 @@ export default {
     return {
       bannerList: [],
       swiperOption: {
-        autoplay: false,
+        autoplay: 6000,
         pagination: '.swiper-pagination',
         slidesPerView: 'auto',
         centeredSlides: true,

@@ -6,7 +6,7 @@
       <comment-lists :comment-lists="mvComments.hotComments"></comment-lists>
     </div>
     <!-- Common comments -->
-    <div v-load-more="{start:loadStart,end:loadMore}" v-if="mvComments.comments && mvComments.comments.length > 0" class="mv-comments-wrapper">
+    <div v-load-more="{start:loadStart,cancel:loadCancel,end:loadMore}" v-if="mvComments.comments && mvComments.comments.length > 0" class="mv-comments-wrapper">
       <div class="mv-hot-comments-title">最新评论
         <span class="comments-total">（{{mvComments.total}}）</span></div>
       <comment-lists :comment-lists="mvComments.comments"></comment-lists>
@@ -54,6 +54,9 @@ export default {
     },
     loadStart() {
       this.loadMoreText = '松开刷新';
+    },
+    loadCancel() {
+      this.loadMoreText = '上拉加载';
     }
   },
   mixins: [loadMore],
@@ -70,6 +73,7 @@ export default {
     margin-left: -12px;
   }
   .load-more {
+    color: #888;
     margin: 10px 0;
     text-align: center;
   }

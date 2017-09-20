@@ -33,7 +33,7 @@ export default {
         return false;
       }
       this.$router.push({
-        path: 'song',
+        path: '/song',
         query: {
           id: id
         }

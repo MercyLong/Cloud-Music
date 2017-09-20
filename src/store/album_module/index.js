@@ -15,8 +15,8 @@ export default {
     }
   },
   actions: {
-    async fetchAlbumDetailByAction({ commit, state }, id) {
-      let res = await fetchAlbumDetail(id);
+    async fetchAlbumDetailByAction({ commit, state }, options) {
+      let res = await fetchAlbumDetail(options);
       commit('SET_ALBUM_INFO', res);
     }
   }

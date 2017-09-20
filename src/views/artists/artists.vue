@@ -1,25 +1,50 @@
 <template>
   <div class="artists-detail-info">
-    <song-play-lists :song-play-lists="artistHotSongs"></song-play-lists>
+    <header-top :title="headerTitle" :has-playing-status="true">
+    </header-top>
+    <artists-header></artists-header>
+    <artists-tab :mv-len="mvLen" :hot-len="hotLen" :album-len="albumLen"></artists-tab>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 <script type="text/javascript">
-import { fetchArtistDetail } from 'service';
 import songPlayLists from 'common/songPlayLists';
+import headerTop from 'common/header';
+import artistsHeader from './children/artistsHeader';
+import artistsTab from './children/artistsTab';
+import { mapGetters } from 'vuex';
 export default {
   data() {
     return {
-      id: this.$route.query.id,
-      artistHotSongs: []
+      id: this.$route.query.id
     };
   },
   components: {
-    songPlayLists
+    songPlayLists,
+    artistsHeader,
+    headerTop,
+    artistsTab
+  },
+  computed: {
+    ...mapGetters(['currentArtistInfo']),
+    headerTitle() {
+      return this.currentArtistInfo.artist && this.currentArtistInfo.artist.name;
+    },
+    hotLen() {
+      return this.currentArtistInfo.artist && this.currentArtistInfo.hotSongs.length;
+    },
+    albumLen() {
+      return this.currentArtistInfo.artist && this.currentArtistInfo.artist.albumSize;
+    },
+    mvLen() {
+      return this.currentArtistInfo.artist && this.currentArtistInfo.artist.mvSize;
+    }
   },
   methods: {
     async initArtistDetail() {
-      let res = await fetchArtistDetail(this.id);
-      this.artistHotSongs = res.hotSongs;
+      this.$store.dispatch('fetchArtistInfoByAction', this.id);
     }
   },
   mounted() {

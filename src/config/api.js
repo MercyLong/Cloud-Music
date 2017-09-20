@@ -16,9 +16,10 @@ let getPlayListDetail;
 let getBannerList;
 let getAlbumDetail;
 let getArtistDetail;
+let getArtistAlbum;
 /* global __DEV__ */
 if (__DEV__) {
-  baseUrl = 'api';
+  baseUrl = '/api';
   onlineMuiscUrl = '';
 } else {
   baseUrl = 'XXX.com';
@@ -39,6 +40,7 @@ getPlayListDetail = `${baseUrl}/playlist/detail`;
 getBannerList = `${baseUrl}/banner`;
 getAlbumDetail = `${baseUrl}/album`;
 getArtistDetail = `${baseUrl}/artists`;
+getArtistAlbum = `${baseUrl}/artist/album`;
 export {
   getRecommendList,
   getNewSongs,
@@ -55,5 +57,6 @@ export {
   getPlayListDetail,
   getBannerList,
   getAlbumDetail,
-  getArtistDetail
+  getArtistDetail,
+  getArtistAlbum
 };
