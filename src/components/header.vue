@@ -1,5 +1,5 @@
 <template>
-  <div :style="{position:isFixed?'fixed':'absolute'}" class="header-top-wrapper">
+  <div :style="{position:isFixed?'fixed':'absolute',backgroundColor:bg?'#d43c33':''}" class="header-top-wrapper">
     <i @click="$router.back(-1)" class="iconfont backTo">&#xe622;</i>
     <div class="header-title">{{title}}</div>
     <div v-if="hasPlayingStatus" @click="gotoCurrentSong" :class="isPlaying?'isPlaying':''" class="playing-status">
@@ -13,7 +13,7 @@
 <script type="text/javascript">
 import { mapGetters } from 'vuex';
 export default {
-  props: ['title', 'hasPlayingStatus', 'isFixed'],
+  props: ['title', 'hasPlayingStatus', 'isFixed', 'bg'],
   computed: {
     ...mapGetters(['isPlaying', 'currentSongInfo'])
   },

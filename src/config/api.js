@@ -17,6 +17,11 @@ let getBannerList;
 let getAlbumDetail;
 let getArtistDetail;
 let getArtistAlbum;
+let getArtistMv;
+let getArtistDesc;
+let getHighQualityPlayList;
+let getClassifyPlayListData;
+let getClassifyPlayListCat;
 /* global __DEV__ */
 if (__DEV__) {
   baseUrl = '/api';
@@ -41,6 +46,11 @@ getBannerList = `${baseUrl}/banner`;
 getAlbumDetail = `${baseUrl}/album`;
 getArtistDetail = `${baseUrl}/artists`;
 getArtistAlbum = `${baseUrl}/artist/album`;
+getArtistMv = `${baseUrl}/artist/mv`;
+getArtistDesc = `${baseUrl}/artist/desc`;
+getHighQualityPlayList = `${baseUrl}/top/playlist/highquality`;
+getClassifyPlayListData = `${baseUrl}/top/playlist`;
+getClassifyPlayListCat = `${baseUrl}/playlist/catlist`;
 export {
   getRecommendList,
   getNewSongs,
@@ -58,5 +68,10 @@ export {
   getBannerList,
   getAlbumDetail,
   getArtistDetail,
-  getArtistAlbum
+  getArtistAlbum,
+  getArtistMv,
+  getArtistDesc,
+  getHighQualityPlayList,
+  getClassifyPlayListData,
+  getClassifyPlayListCat
 };

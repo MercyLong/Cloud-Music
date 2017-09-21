@@ -100,6 +100,7 @@ export default {
   box-sizing: border-box;
   .playing-status {
     height: 19px;
+    margin-right: 5px;
     &.isPlaying {
       @keyframes loading {
         0%,

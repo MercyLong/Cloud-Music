@@ -48,10 +48,12 @@ export default {
       }, {
         text: 'MV',
         size: this.mvLen,
+        route: 'ArtistsMv',
         idx: 2
       }, {
         text: '歌手信息',
-        idx: 3
+        idx: 3,
+        route: 'ArtistsDesc'
       }];
     }
   },

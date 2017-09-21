@@ -23,6 +23,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .recommend-tab-wrapper {
+  min-height: 100%;
   transform: translate3d(0, 0, 0);
 }
 

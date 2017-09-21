@@ -30,7 +30,7 @@
           </li>
         </ul>
         <ul v-if="searchArtist && searchArtist.length > 0" class="search-result-artist-list border-bt">
-          <li v-for="artist in searchArtist">
+          <li @click="gotoArtist(artist)" v-for="artist in searchArtist">
             <div class="pic-url">
               <img :src="getImageUrl(artist.img1v1Url)">
             </div>
@@ -76,6 +76,14 @@ export default {
     },
     setLocalHistory(keyword) {
       localStorage.searchHistory.push(keyword);
+    },
+    gotoArtist(artist) {
+      this.$router.push({
+        path: '/artists',
+        query: {
+          id: artist.id
+        }
+      });
     },
     gotoAlbum(album) {
       // 设置本地缓存

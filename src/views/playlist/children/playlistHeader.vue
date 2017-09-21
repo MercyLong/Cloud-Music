@@ -70,6 +70,7 @@ export default {
     display: flex;
     transform: translate3d(0, 0, 0);
     .conent-wrapper {
+      flex: 1;
       margin-left: 15px;
       .content-name {
         margin-top: 15px;

@@ -27,7 +27,6 @@ export default {};
 }
 
 .loading-wrapper {
-  padding: 10px;
   display: flex;
   height: 40px;
   align-items: center;
@@ -39,18 +38,6 @@ export default {};
       display: inline-block;
       width: 2px;
       background: #d33a31;
-      &:nth-child(1) {
-        -webkit-animation-delay: 0s;
-      }
-      &:nth-child(2) {
-        -webkit-animation-delay: 0.1s;
-      }
-      &:nth-child(3) {
-        -webkit-animation-delay: 0.4s;
-      }
-      &:nth-child(4) {
-        -webkit-animation-delay: 0.3s;
-      }
       &.first {
         height: 15px;
       }

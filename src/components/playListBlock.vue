@@ -41,6 +41,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .recommend-list {
+  position: relative;
   margin-bottom: 24px;
   overflow: hidden;
   .recommend-item {

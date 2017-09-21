@@ -6,7 +6,8 @@
           <span>{{tab.text}}</span>
         </div>
       </li>
-      <div :style="{width:elemWidth,transform:`translate3d(${elemMarginLeft},0,0) scaleY(.5)`,transition:isFirstLoad?'':'all .5s'}" class="slider-bar"></div>
+      <div :style="{width:elemWidth,transform:`translate3d(${elemMarginLeft},0,0) scaleY(.5)`,transition:isFirstLoad?'':'all .5s'}" class="slider-bar">
+      </div>
     </nav>
   </div>
 </template>
@@ -22,10 +23,14 @@ export default {
         route: 'recommend'
       }, {
         id: 1,
+        text: '歌单',
+        route: 'playListTab'
+      }, {
+        id: 2,
         text: '排行榜',
         route: 'ranking'
       }, {
-        id: 2,
+        id: 3,
         text: '搜索',
         route: 'search'
       }],

@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
   const id = req.query.id
   createWebAPIRequest(
     'music.163.com',
-    `/eapi/v1/album/${id}`,
+    `/weapi/v1/album/${id}`,
     'POST',
     data,
     cookie,

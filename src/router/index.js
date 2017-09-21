@@ -6,6 +6,8 @@ const Song = r => require.ensure([], () => r(require('@/views/song/song')), 'son
 const RecommendTab = r => require.ensure([], () => r(require('@/views/home/children/recommendTab')), 'recommendTab');
 const RankingTab = r => require.ensure([], () => r(require('@/views/home/children/rankingTab')), 'rankingTab');
 const SearchTab = r => require.ensure([], () => r(require('@/views/home/children/searchTab')), 'searchTab');
+const PlayListTab = r => require.ensure([], () => r(require('@/views/home/children/playListTab')), 'playListTab');
+const PlayListTabSelector = r => require.ensure([], () => r(require('@/views/home/children/playListTab/playListTabSelector')), 'playListTabSelector');
 const Mv = r => require.ensure([], () => r(require('@/views/mv/mv')), 'mv');
 const PlayList = r => require.ensure([], () => r(require('@/views/playlist/playlist')), 'playlist');
 const Album = r => require.ensure([], () => r(require('@/views/album/album')), 'album');
@@ -13,7 +15,9 @@ const RankList = r => require.ensure([], () => r(require('@/views/ranklist/rankl
 const Topic = r => require.ensure([], () => r(require('@/views/topic/topic')), 'topic');
 const Artists = r => require.ensure([], () => r(require('@/views/artists/artists')), 'artists');
 const ArtistsAlbum = r => require.ensure([], () => r(require('@/views/artists/children/artistsAlbum')), 'artistsAlbum');
-const ArtistsHot = r => require.ensure([], () => r(require('@/views/artists/children/ArtistsHot')), 'ArtistsHot');
+const ArtistsHot = r => require.ensure([], () => r(require('@/views/artists/children/artistsHot')), 'artistsHot');
+const ArtistsMv = r => require.ensure([], () => r(require('@/views/artists/children/artistsMv')), 'artistsMv');
+const ArtistsDesc = r => require.ensure([], () => r(require('@/views/artists/children/artistsDesc')), 'artistsDesc');
 Vue.use(Router);
 export default new Router({
   mode: 'history',
@@ -23,18 +27,31 @@ export default new Router({
     component: Home,
     redirect: { name: 'recommend' },
     children: [{
-      path: '/recommend',
-      name: 'recommend',
-      component: RecommendTab
-    }, {
-      path: '/ranking',
-      name: 'ranking',
-      component: RankingTab
-    }, {
-      path: '/search',
-      name: 'search',
-      component: SearchTab
-    }]
+        path: '/recommend',
+        name: 'recommend',
+        component: RecommendTab
+      }, {
+        path: '/ranking',
+        name: 'ranking',
+        component: RankingTab
+      }, {
+        path: '/search',
+        name: 'search',
+        component: SearchTab
+      },
+      {
+        path: '/playListTab',
+        name: 'playListTab',
+        component: PlayListTab
+      }
+    ]
+  }, {
+    path: '/playListSelector',
+    name: 'selector',
+    component: PlayListTabSelector,
+    meta: {
+      bottomToTop: true
+    }
   }, {
     path: '/song',
     name: 'SongPlayer',
@@ -72,6 +89,14 @@ export default new Router({
       path: 'album',
       name: 'ArtistsAlbum',
       component: ArtistsAlbum
+    }, {
+      path: 'mv',
+      name: 'ArtistsMv',
+      component: ArtistsMv
+    }, {
+      path: 'desc',
+      name: 'ArtistsDesc',
+      component: ArtistsDesc
     }]
   }],
   scrollBehavior(to, from, savedPosition) {

@@ -8,10 +8,12 @@ export const loadMore = {
         let scrollTop;
         let height;
         let isTriggerEvent;
+        // let paddingBottom;
         el.addEventListener('touchmove', () => {
           offset = el.offsetTop;
           scrollTop = document.body.scrollTop;
           height = el.clientHeight;
+          // paddingBottom = document.defaultView.getComputedStyle(el, 'paddingBottom');
           console.log(windowHeight, scrollTop, offset, height);
           isTriggerEvent = (windowHeight + scrollTop >= offset + height + scrollReducer);
           touchMove();
@@ -19,6 +21,7 @@ export const loadMore = {
         el.addEventListener('touchend', () => {
           touchEnd();
         }, false);
+        console.log(this);
         const touchMove = () => {
           if (isTriggerEvent) {
             binding.value['start']();

@@ -63,8 +63,6 @@ export default {
       let res = await fetchSongAudioUrl(songId);
       commit('SET_AUDIO_URL', res.data[0].url);
       commit('SET_AUDIO_ELEMENT', document.getElementById('song-player-audio'));
-      // 解决Iphone不能自动播放的问题
-      document.getElementById('song-player-audio').play();
     }
   }
 };

@@ -169,6 +169,48 @@ var fetchArtistAlbum = (options) => {
     return result;
   });
 };
+/*
+ **@ 获取歌手MV信息
+ */
+var fetchArtistMv = (options) => {
+  return fetch('GET', api.getArtistMv, options).then((result) => {
+    return result;
+  });
+};
+/*
+ **@ 获取歌手介绍信息
+ */
+var fetchArtistDesc = (id) => {
+  return fetch('GET', api.getArtistDesc, { id: id }).then((result) => {
+    return result;
+  });
+};
+
+/*
+ **@ 获取精品歌单
+ */
+var fetchHighQualityPlayList = (options) => {
+  return fetch('GET', api.getHighQualityPlayList, options).then((result) => {
+    return result;
+  });
+};
+/*
+ **@ 获取全部分类歌单
+ */
+var fetchClassifyPlayListData = (options) => {
+  return fetch('GET', api.getClassifyPlayListData, options).then((result) => {
+    return result;
+  });
+};
+
+/*
+ **@ 获取分类歌单标签
+ */
+var fetchClassifyPlayListCat = (options) => {
+  return fetch('GET', api.getClassifyPlayListCat, options).then((result) => {
+    return result;
+  });
+};
 export {
   fetchRecommendList,
   fetchNewSongList,
@@ -186,5 +228,10 @@ export {
   fetchBannerList,
   fetchAlbumDetail,
   fetchArtistDetail,
-  fetchArtistAlbum
+  fetchArtistAlbum,
+  fetchArtistMv,
+  fetchArtistDesc,
+  fetchHighQualityPlayList,
+  fetchClassifyPlayListData,
+  fetchClassifyPlayListCat
 };

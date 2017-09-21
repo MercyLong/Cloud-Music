@@ -1,8 +1,8 @@
 <template>
-  <div class="artists-album-wrapper">
+  <div v-load-more="{start:loadStart,cancel:
+    	loadCancel,end:loadEnd}" class="artists-album-wrapper">
     <loading v-if="showLoading"></loading>
-    <ul v-load-more="{start:loadStart,cancel:
-    	loadCancel,end:loadEnd}" class="artists-album-list">
+    <ul class="artists-album-list">
       <li @click="gotoAlbum(item)" v-for="item in currentArtistAlbum.hotAlbums" class="artists-album-item ">
         <div class="img-wrapper">
           <img :src="getImageUrl(item.picUrl,100,'webp')">
@@ -37,9 +37,7 @@ export default {
       limit: 20,
       loadText: '',
       hasMore: false,
-      currentArtistAlbum: {
-        hotAlbums: []
-      },
+      currentArtistAlbum: {},
       isLoading: false
     };
   },
