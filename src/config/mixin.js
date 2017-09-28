@@ -2,37 +2,58 @@ export const loadMore = {
   directives: {
     'load-more': {
       bind: (el, binding) => {
-        const windowHeight = window.screen.height;
-        const scrollReducer = 10;
-        let offset;
-        let scrollTop;
+        let windowHeight = window.screen.height;
         let height;
-        let isTriggerEvent;
-        // let paddingBottom;
-        el.addEventListener('touchmove', () => {
-          offset = el.offsetTop;
-          scrollTop = document.body.scrollTop;
-          height = el.clientHeight;
-          // paddingBottom = document.defaultView.getComputedStyle(el, 'paddingBottom');
-          console.log(windowHeight, scrollTop, offset, height);
-          isTriggerEvent = (windowHeight + scrollTop >= offset + height + scrollReducer);
-          touchMove();
+        let setTop;
+        let paddingBottom;
+        let marginBottom;
+        let requestFram;
+        let oldScrollTop;
+        let scrollEl;
+        let heightEl;
+        let scrollType = el.attributes.type && el.attributes.type.value;
+        let scrollReduce = 200;
+        if (scrollType === 2) {
+          scrollEl = el;
+          heightEl = el.children[0];
+        } else {
+          scrollEl = document.body;
+          heightEl = el;
+        }
+
+        el.addEventListener('touchstart', () => {
+          height = heightEl.clientHeight;
+          setTop = el.offsetTop;
+          paddingBottom = 0;
+          marginBottom = 0;
         }, false);
+
+        el.addEventListener('scroll', () => {
+          loadMore();
+        }, false);
+
         el.addEventListener('touchend', () => {
-          touchEnd();
+          oldScrollTop = scrollEl.scrollTop;
+          moveEnd();
         }, false);
-        console.log(this);
-        const touchMove = () => {
-          if (isTriggerEvent) {
-            binding.value['start']();
-          } else {
-            binding.value['cancel']();
-          }
+
+        const moveEnd = () => {
+          requestFram = requestAnimationFrame(() => {
+            if (scrollEl.scrollTop !== oldScrollTop) {
+              oldScrollTop = scrollEl.scrollTop;
+              moveEnd();
+            } else {
+              cancelAnimationFrame(requestFram);
+              height = heightEl.clientHeight;
+              loadMore();
+            };
+          });
         };
-        const touchEnd = () => {
-          if (isTriggerEvent) {
+
+        const loadMore = () => {
+          if (scrollEl.scrollTop + windowHeight >= height + setTop + paddingBottom + marginBottom - scrollReduce) {
             binding.value['end']();
-          }
+          };
         };
       }
     }

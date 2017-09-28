@@ -18,6 +18,7 @@ const ArtistsAlbum = r => require.ensure([], () => r(require('@/views/artists/ch
 const ArtistsHot = r => require.ensure([], () => r(require('@/views/artists/children/artistsHot')), 'artistsHot');
 const ArtistsMv = r => require.ensure([], () => r(require('@/views/artists/children/artistsMv')), 'artistsMv');
 const ArtistsDesc = r => require.ensure([], () => r(require('@/views/artists/children/artistsDesc')), 'artistsDesc');
+const HighQualityList = r => require.ensure([], () => r(require('@/views/highQualityList/highQualityList')), 'highQualityList');
 Vue.use(Router);
 export default new Router({
   mode: 'history',
@@ -48,10 +49,7 @@ export default new Router({
   }, {
     path: '/playListSelector',
     name: 'selector',
-    component: PlayListTabSelector,
-    meta: {
-      bottomToTop: true
-    }
+    component: PlayListTabSelector
   }, {
     path: '/song',
     name: 'SongPlayer',
@@ -60,6 +58,10 @@ export default new Router({
     path: '/mv',
     name: 'VideoPlayer',
     component: Mv
+  }, {
+    path: '/highQualityList',
+    name: 'highQualityList',
+    component: HighQualityList
   }, {
     path: '/playlist',
     name: 'PlayList',
@@ -100,6 +102,7 @@ export default new Router({
     }]
   }],
   scrollBehavior(to, from, savedPosition) {
+    console.log(to, from);
     if (savedPosition) {
       return savedPosition;
     } else {

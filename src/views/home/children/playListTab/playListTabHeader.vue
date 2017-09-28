@@ -1,5 +1,5 @@
 <template>
-  <div class="high-quality-wrapper">
+  <div @click="gotoHighQuality(coverInfo)" class="high-quality-wrapper">
     <div :style="{backgroundImage:!coverInfo.coverImgUrl?'':`url(${getImageUrl(coverInfo.coverImgUrl,200,'webp')})`}" class="high-quality">
     </div>
     <div class="hight-quality-detail-wrapper">
@@ -40,6 +40,11 @@ export default {
       if (res.playlists && res.playlists.length) {
         this.coverInfo = res.playlists[0];
       }
+    },
+    gotoHighQuality(itemInfo) {
+      this.$router.push({
+        path: '/highQualityList'
+      });
     }
   },
   mounted() {

@@ -2,7 +2,7 @@
   <div class="common-page-footer-wrapper">
     <div v-if="!isLoading" class="">{{loadText}}</div>
     <div v-else class="">
-      <loading></loading>
+      加载中...
     </div>
   </div>
 </template>

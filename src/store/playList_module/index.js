@@ -8,9 +8,9 @@ export default {
     // 当前播放列表类型 true.歌单类型 false.历史信息（本地信息）
     playListType: false,
     // 分类歌单中所选类型
-    playListClassifyType: '全部',
-    playListClassifyInfo: [],
-    classifyLoadingStatus: false
+    playListClassifyType: '全部歌单',
+    // 分类歌单的列表
+    playListClassifyInfo: []
   },
   getters: {
     currentPlayListDetail(state) {
@@ -27,9 +27,6 @@ export default {
     },
     playListClassifyInfo(state) {
       return state.playListClassifyInfo;
-    },
-    classifyLoadingStatus(state) {
-      return state.classifyLoadingStatus;
     }
   },
   actions: {
@@ -58,9 +55,6 @@ export default {
     },
     SET_PLAY_LIST_CLASSIFY_INFO(state, info) {
       state.playListClassifyInfo = [...info];
-    },
-    SET_CLASSIFY_LOADING_STATUS(state, boolean) {
-      state.classifyLoadingStatus = boolean;
     }
   }
 };

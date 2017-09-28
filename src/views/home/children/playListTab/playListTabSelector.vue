@@ -1,8 +1,8 @@
 <template>
   <div class="play-list-tab-selector">
-    <header-top :has-playing-status="true" :bg="true" :title="'筛选歌单'">
-    </header-top>
-    <div class="all-wrapper">{{all.name}}</div>
+    <div class="all-wrapper">
+      <div :class="all.name == playListClassifyType?'active':''" class="all-name border-1px">{{all.name}}</div>
+    </div>
     <ul class="sub-list-wrapper">
       <li v-for="sub in subLists" class="sub-item-wrapper ">
         <div class="sub-item-title border-rt">
@@ -10,88 +10,62 @@
           <div>{{sub.name}}</div>
         </div>
         <div class="top-list-wrapper">
-          <div @click="selectClassifyPlayList(item)" v-for="item in sub.morelist" class="top-item border-1px">
-            {{item.name}}
+          <div :class="item.name == playListClassifyType?'active':''" @click="selectClassifyPlayList(item)" v-for="item in sub.morelist" class="top-item border-1px">
+            <div class="item-name">{{item.name}}
+              <i v-if="item.name == playListClassifyType" class="iconfont">&#xe647;</i>
+            </div>
           </div>
         </div>
         <div v-if="sub.more" class="more-cate-list">
-          <div v-for="moreCate in sub.toplist" class="more-cate-item border-1px">{{moreCate.name}}</div>
+          <div :class="moreCate.name == playListClassifyType?'active':''" @click="selectClassifyPlayList(moreCate)" v-for="moreCate in sub.toplist" class="more-cate-item border-1px">
+            <div class="item-name">{{moreCate.name}}
+              <i v-if="moreCate.name == playListClassifyType" class="iconfont">&#xe647;</i></div>
+          </div>
         </div>
       </li>
     </ul>
   </div>
 </template>
 <script type="text/javascript">
-import headerTop from 'common/header';
-import { mapMutations } from 'vuex';
-import { fetchClassifyPlayListCat } from 'service';
+import { mapGetters, mapMutations } from 'vuex';
 export default {
-  data() {
-    return {
-      subLists: [],
-      all: {}
-    };
-  },
-  components: {
-    headerTop
-  },
+  props: ['subLists', 'all'],
   methods: {
-    ...mapMutations(['SET_PLAY_LIST_CLASSIFY_TYPE', 'SET_PLAY_LIST_CLASSIFY_INFO']),
-    async initPlayListTags() {
-      let res = await fetchClassifyPlayListCat();
-      this.subLists = this.dataProcess(res);
-      this.all = Object.assign({}, res.all);
-    },
-    async selectClassifyPlayList(item) {
-      this.$router.back(-1);
-      // 设置当前分类歌单的类型
+    selectClassifyPlayList(item) {
       this.SET_PLAY_LIST_CLASSIFY_TYPE(item.name);
-      this.$store.dispatch('fetchClassifyPlayListDataByAction', {
-        cat: item.name,
-        offset: 0,
-        limit: 20
-      });
+      this.$emit('selectype', item);
     },
-    dataProcess(res) {
-      let ret = [];
-      let cate = res.categories;
-      let subList = res.sub;
-      Object.keys(cate).forEach((key) => {
-        ret[key] = {};
-        ret[key]['toplist'] = subList.filter((val, idx) => {
-          return val.category === parseInt(key);
-        });
-        ret[key]['name'] = cate[key];
-        if (ret[key]['toplist'].length > 6) {
-          ret[key]['more'] = true;
-          ret[key]['morelist'] = ret[key]['toplist'].splice(0, 6);
-        } else {
-          ret[key]['morelist'] = [...ret[key]['toplist']];
-        }
-      });
-      return ret;
-    }
+    ...mapMutations(['SET_PLAY_LIST_CLASSIFY_TYPE'])
   },
-  mounted() {
-    this.initPlayListTags();
+  computed: {
+    ...mapGetters(['playListClassifyType'])
   }
 };
 
 </script>
 <style lang="less" scoped>
 .play-list-tab-selector {
-  padding-top: 64px;
+  color: #333;
+  font-size: 14px;
   background: #e1e1e1;
+
   .all-wrapper {
     height: 60px;
     text-align: center;
-    line-height: 60px;
     background: #fff;
+    padding: 10px;
+    box-sizing: border-box;
+    .all-name {
+      line-height: 40px;
+      &.active {
+        border: 1px solid rgb(212, 60, 51);
+      }
+    }
   }
   .more-cate-list {
     width: 100%;
     overflow: hidden;
-    div {
+    .more-cate-item {
       width: 25%;
       height: 50px;
       line-height: 50px;
@@ -106,10 +80,45 @@ export default {
       background: #fff;
       margin-top: 10px;
     }
-    .top-item {
+    .top-item,
+    .more-cate-item {
+      position: relative;
       width: 25%;
       float: left;
       height: 50px;
+      box-sizing: border-box;
+      &.active {
+        &:after {
+          border-color: rgb(212, 60, 51);
+          border-width: 2px;
+        }
+        .iconfont {
+          position: absolute;
+          right: 0;
+          background: red;
+        }
+        .item-name {
+          position: relative;
+          .iconfont {
+            position: absolute;
+            width: 0;
+            height: 0;
+            right: 14px;
+            top: 18px;
+            color: #fff;
+          }
+          &:before {
+            position: absolute;
+            content: '';
+            width: 0;
+            height: 0;
+            right: 0;
+            bottom: 0;
+            border-bottom: 20px solid rgb(212, 60, 51);
+            border-left: 20px solid transparent;
+          }
+        }
+      }
       line-height: 50px;
     }
     .sub-item-title {

@@ -43,6 +43,7 @@
       </ul>
       <div @click="hideSongLists" class="close-btn border-tp">关闭</div>
     </div>
+    <div @click="hideSongLists" @touchstart.prevent="()=>{}" :class="isShowListsPanel?'active':''" class="action-sheet-bg-mask"></div>
   </div>
 </template>
 <script type="text/javascript">
@@ -196,6 +197,19 @@ export default {
 </script>
 <style lang="less" scoped>
 .audio-control-wrapper {
+  .action-sheet-bg-mask {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    &.active {
+      display: block;
+    }
+  }
   .audio-song-list-panel {
     background: #fff;
     width: 100%;
@@ -203,6 +217,7 @@ export default {
     bottom: 0;
     transform: translate(0, 100%);
     transition: transform .5s;
+    z-index: 4;
     &.active {
       transform: translate(0, 0);
     }

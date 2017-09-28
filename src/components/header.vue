@@ -53,15 +53,13 @@ export default {
   display: flex;
   align-items: center;
   .header-title {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    flex: 1;
+    text-align: center;
     font-size: 18px;
     color: #fff;
   }
   .playing-status {
-    flex: 1;
+    width: 40px;
     text-align: right;
     margin-right: 15px;
     height: 19px;
@@ -118,6 +116,7 @@ export default {
     }
   }
   .backTo {
+    width: 40px;
     color: rgba(255, 255, 255, 0.7);
     margin-left: 10px;
     font-size: 24px;

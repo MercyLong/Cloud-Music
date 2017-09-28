@@ -24,7 +24,7 @@ body {
 
 .router-slid-enter-active,
 .router-slid-leave-active {
-  transition: all .1s;
+  transition: all .2s;
 }
 
 .router-slid-enter,

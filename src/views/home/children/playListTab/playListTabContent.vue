@@ -1,68 +1,122 @@
 <template>
-  <div class="play-list-tab-content-wrapper">
-    <div @click="gotoSelect" class="selector-wrapper">
-      <div class="select-btn">{{playListClassifyType}}
-        <i class="iconfont">&#xe604;</i>
+  <div>
+    <div v-if="!isShowSelector" class="play-list-tab-content-wrapper">
+      <div class="selector-wrapper">
+        <div @click="gotoSelect" class="select-btn">{{playListClassifyType}}
+          <i class="iconfont">&#xe604;</i>
+        </div>
+        <div class="hot-tags">
+          <span>华语</span>
+          <span class="border-lt border-rt">轻音乐</span>
+          <span>摇滚</span>
+        </div>
+      </div>
+      <div class="classify-list-wrapper">
+        <ul v-load-more="{start:loadStart,cancel:loadCancel,end:loadEnd}" class="classify-list">
+          <li @click="gotoPlayList(item)" v-for="item in playListClassifyInfo" class="classify-item">
+            <div class="img-wrapper">
+              <div class="play-count">
+                <i class="iconfont">&#xe600;</i>
+                <span>{{item.playCount|addMeasurement(4,'万')}}</span>
+              </div>
+              <img :src="getImageUrl(item.coverImgUrl,400,'webp')">
+            </div>
+            <div class="name-wrapper">
+              {{item.name}}
+            </div>
+          </li>
+        </ul>
+        <pagination-load :is-loading="isLoading" :loadText="loadText">
+        </pagination-load>
       </div>
     </div>
-    <div class="classify-list-wrapper">
-      <ul v-load-more="{start:loadStart,cancel:loadCancel,end:loadEnd}" class="classify-list">
-        <li @click="gotoPlayList(item)" v-for="item in playListClassifyInfo" class="classify-item">
-          <div class="img-wrapper">
-            <div class="play-count">
-              <i class="iconfont">&#xe600;</i>
-              <span>{{item.playCount|addMeasurement(4,'万')}}</span>
-            </div>
-            <img :src="getImageUrl(item.coverImgUrl,400,'webp')">
-          </div>
-          <div class="name-wrapper">
-            {{item.name}}
-          </div>
-        </li>
-      </ul>
-      <pagination-load :is-loading="isLoading" :loadText="loadText"></pagination-load>
-    </div>
+    <transition name="bounce-slider" mode="out-in">
+      <div class="play-list-selector-container" v-if="isShowSelector">
+        <div class="selector-header">
+          <div @click="hideSelector" class="header">取消</div>
+          <div class="body">筛选歌单</div>
+          <div class="footer"></div>
+        </div>
+        <play-list-tab-selector :play-List-classify-type="playListClassifyType" :all="all" :sub-lists="subLists" @selectype="selectPlayType"></play-list-tab-selector>
+      </div>
+    </transition>
   </div>
 </template>
 <script type="text/javascript">
-import { mapGetters, mapMutations } from 'vuex';
+import { mapMutations, mapGetters } from 'vuex';
 import { getImageUrl, loadMore } from 'config/mixin';
 import { setLocal } from 'config/util';
 import loading from 'common/loading';
+import { fetchClassifyPlayListData, fetchClassifyPlayListCat } from 'service';
 import paginationLoad from 'common/paginationLoad';
+import playListTabSelector from './playListTabSelector';
 export default {
   data() {
     return {
       offset: 0,
       limit: 20,
       isLoading: false,
-      loadText: ''
+      loadText: '',
+      preventRepeatRequest: true,
+      hasMore: null,
+      isShowSelector: false,
+      all: {},
+      subLists: []
     };
   },
   components: {
     loading,
-    paginationLoad
+    paginationLoad,
+    playListTabSelector
   },
   mixins: [getImageUrl, loadMore],
-  computed: {
-    ...mapGetters(['playListClassifyType', 'playListClassifyInfo'])
+  mounted() {
+    // 本地没有的时候初始化
+    if (!this.playListClassifyInfo.length) {
+      this.initClassifyPlayList();
+    };
+    this.initClassPlayListTags();
   },
   watch: {
     playListClassifyType(newVal, oldVal) {
-      alert(newVal);
+      this.initClassifyPlayList();
+      document.body.scrollTop = 0;
     }
   },
-  mounted() {
-    if (!this.playListClassifyInfo.length) {
-      this.initClassifyPlayList();
-    }
+  computed: {
+    ...mapGetters(['playListClassifyInfo', 'playListClassifyType'])
   },
   methods: {
     ...mapMutations(['SET_PLAY_LIST_CLASSIFY_INFO']),
     gotoSelect() {
-      this.$router.push({
-        name: 'selector'
+      this.isShowSelector = true;
+    },
+    selectPlayType(item) {
+      this.hideSelector();
+    },
+    async initClassPlayListTags() {
+      let result = await fetchClassifyPlayListCat();
+      this.subLists = this.dataProcess(result);
+      this.all = Object.assign({}, result.all);
+    },
+    dataProcess(res) {
+      let ret = [];
+      let cate = res.categories;
+      let subList = res.sub;
+      Object.keys(cate).forEach((key) => {
+        ret[key] = {};
+        ret[key]['toplist'] = subList.filter((val, idx) => {
+          return val.category === parseInt(key);
+        });
+        ret[key]['name'] = cate[key];
+        if (ret[key]['toplist'].length > 6) {
+          ret[key]['more'] = true;
+          ret[key]['morelist'] = ret[key]['toplist'].splice(0, 6);
+        } else {
+          ret[key]['morelist'] = [...ret[key]['toplist']];
+        }
       });
+      return ret;
     },
     async fetchPlayListClassify() {
       let res = await this.$store.dispatch('fetchClassifyPlayListDataByAction', {
@@ -70,17 +124,30 @@ export default {
         limit: this.limit,
         cat: this.playListClassifyType
       });
+      this.hasMore = res.more;
       this.loadText = res.more ? '上拉加载' : '没有更多了';
       return res;
     },
-    async loadEnd() {
+    hideSelector() {
+      this.isShowSelector = false;
+    },
+    loadEnd() {
+      if (!this.preventRepeatRequest) {
+        return;
+      };
+      this.preventRepeatRequest = false;
       this.isLoading = true;
       this.offset += this.limit;
-      let res = await this.fetchPlayListClassify();
-      console.log(this.playListClassifyInfo);
-      let newLists = [...this.playListClassifyInfo, ...res.playlists];
-      console.log(newLists);
-      this.SET_PLAY_LIST_CLASSIFY_INFO(newLists);
+      fetchClassifyPlayListData({
+        offset: this.offset,
+        limit: this.limit,
+        cat: this.playListClassifyType
+      }).then(res => {
+        this.SET_PLAY_LIST_CLASSIFY_INFO(this.playListClassifyInfo.concat(res.playlists));
+        setTimeout(() => {
+          this.preventRepeatRequest = true;
+        }, 1000);
+      });
       this.isLoading = false;
     },
     gotoPlayList(item) {
@@ -94,16 +161,59 @@ export default {
         }
       });
     },
-    async initClassifyPlayList() {
-      let result = await this.fetchPlayListClassify();
-      this.SET_PLAY_LIST_CLASSIFY_INFO(result.playlists);
+    initClassifyPlayList() {
+      fetchClassifyPlayListData({
+        offset: this.offset,
+        limit: this.limit,
+        cat: this.playListClassifyType
+      }).then(res => {
+        this.SET_PLAY_LIST_CLASSIFY_INFO([...res.playlists]);
+        this.loadText = res.more ? '上拉加载' : '没有更多了';
+      });
     }
   }
 };
 
 </script>
 <style lang="less" scoped>
+.bounce-slider-enter-active,
+.bounce-slider-leave-active {
+  transition: all .2s;
+}
+
+.bounce-slider-enter,
+.bounce-slider-leave-active {
+  transform: translate3d(0, 100%, 0);
+}
+
+.play-list-selector-container {
+  position: absolute;
+  z-index: 999;
+  top: 0;
+  .selector-header {
+    width: 100%;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    color: #fff;
+    background: #d43c33;
+    .header,
+    .footer {
+      margin-left: 10px;
+      line-height: 64px;
+      width: 80px;
+      height: 100%;
+    }
+    .body {
+      text-align: center;
+      flex: 1;
+    }
+  }
+}
+
 .classify-list-wrapper {
+
   .classify-list {
     overflow: hidden;
     .classify-item {
@@ -172,13 +282,25 @@ export default {
     border-radius: 16px;
     border: 1px solid #e1e1e1;
     font-size: 14px;
-    color: #888;
+    color: #333;
     margin-left: 10px;
     height: 30px;
     line-height: 30px;
     .iconfont {
       font-size: 22px;
       color: #888;
+    }
+  }
+  .hot-tags {
+    line-height: 1;
+    flex: 1;
+    text-align: right;
+    padding-right: 10px;
+    font-size: 13px;
+    color: #999;
+    span {
+      display: inline-block;
+      padding: 0 5px;
     }
   }
 }

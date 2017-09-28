@@ -211,6 +211,15 @@ var fetchClassifyPlayListCat = (options) => {
     return result;
   });
 };
+
+/*
+ **@ 获取全部精品歌单
+ */
+var fetchHighQualityPlayListData = (options) => {
+  return fetch('GET', api.getHighQualityPlayList, options).then((result) => {
+    return result;
+  });
+};
 export {
   fetchRecommendList,
   fetchNewSongList,
@@ -233,5 +242,6 @@ export {
   fetchArtistDesc,
   fetchHighQualityPlayList,
   fetchClassifyPlayListData,
-  fetchClassifyPlayListCat
+  fetchClassifyPlayListCat,
+  fetchHighQualityPlayListData
 };
