@@ -5,4 +5,4 @@ WORKDIR /home/app
 COPY . /home/app
 EXPOSE 8888
 RUN  npm install      && npm run build     && cp -r dist/* /home/app/
-CMD ["nginx","-g","daemon off;"]
+CMD [ "npm", "start" ]
