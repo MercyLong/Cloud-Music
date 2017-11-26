@@ -27,7 +27,7 @@ if (__DEV__) {
   baseUrl = '/api';
   onlineMuiscUrl = '';
 } else {
-  baseUrl = 'XXX.com';
+  baseUrl = '/api';
 }
 getRecommendList = `${baseUrl}/personalized`;
 getNewSongs = `${getRecommendList}/newsong`;

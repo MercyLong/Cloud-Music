@@ -64,7 +64,6 @@ function createWebAPIRequest(
         return
       } else {
         res.on('data', function(chunk) {
-          console.log(chunk)
           music_req += chunk
         })
         res.on('end', function() {
