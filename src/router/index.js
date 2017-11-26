@@ -28,24 +28,22 @@ export default new Router({
     component: Home,
     redirect: { name: 'recommend' },
     children: [{
-        path: '/recommend',
-        name: 'recommend',
-        component: RecommendTab
-      }, {
-        path: '/ranking',
-        name: 'ranking',
-        component: RankingTab
-      }, {
-        path: '/search',
-        name: 'search',
-        component: SearchTab
-      },
-      {
-        path: '/playListTab',
-        name: 'playListTab',
-        component: PlayListTab
-      }
-    ]
+      path: '/recommend',
+      name: 'recommend',
+      component: RecommendTab
+    }, {
+      path: '/ranking',
+      name: 'ranking',
+      component: RankingTab
+    }, {
+      path: '/search',
+      name: 'search',
+      component: SearchTab
+    }, {
+      path: '/playListTab',
+      name: 'playListTab',
+      component: PlayListTab
+    }]
   }, {
     path: '/playListSelector',
     name: 'selector',
@@ -102,7 +100,6 @@ export default new Router({
     }]
   }],
   scrollBehavior(to, from, savedPosition) {
-    console.log(to, from);
     if (savedPosition) {
       return savedPosition;
     } else {
