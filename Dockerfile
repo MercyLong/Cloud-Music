@@ -3,6 +3,6 @@ RUN apt-get update  && apt-get install -y nginx
 RUN mkdir -p /home/app
 WORKDIR /home/app
 COPY . /home/app
-EXPOSE 8888
+EXPOSE 8089
 RUN  npm install      && npm run build     && cp -r dist/* /home/app/
-CMD [ "npm", "start" ]
+CMD ["nginx","-g","daemon off;"]
